@@ -1,4 +1,5 @@
 import Layout from '@/components/Layout';
+import { fetchToken } from '@/helpers/getToken';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -16,12 +17,16 @@ export default function Redirect() {
             const codeValue = params.get('code');
 
             if (!codeValue) {
+                sessionStorage.removeItem('access_token');
+                sessionStorage.removeItem('refresh_token');
                 router.push('/');
             }
 
             setCode(codeValue)
 
         } else if (!code) {
+            sessionStorage.removeItem('access_token');
+            sessionStorage.removeItem('refresh_token');
             router.push('/');
         }
     }, [router]);
@@ -32,26 +37,24 @@ export default function Redirect() {
         if (code) {
             const fetchData = async (code) => {
                 try {
-                    const response = await fetch('/api/token', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ code }),
-                    });
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    const data = await response.json();
+
+                    let data = await fetchToken(code)
+
                     console.log(data);
 
                     if (data.error) {
                         const error = 'Error en inicio de sesion. Intente de nuevo.';
                         const encodedError = encodeURIComponent(error);
                         const url = `/?error=${encodedError}`;
+                        sessionStorage.removeItem('access_token');
+                        sessionStorage.removeItem('refresh_token');
                         window.location.href = url;
-
                     }
+
+                    sessionStorage.setItem('access_token', data?.access_token);
+                    sessionStorage.setItem('refresh_token', data?.refresh_token);
+
+                    router.push('/')
 
                 } catch (error) {
                     console.log('Error fetching data:', error);
@@ -61,7 +64,7 @@ export default function Redirect() {
             fetchData(code)
         }
 
-    }, [code])
+    }, [code, router])
 
     return (
         <Layout>
