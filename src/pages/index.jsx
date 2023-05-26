@@ -5,41 +5,34 @@ import { useEffect, useState } from "react";
 import { toast } from 'sonner';
 
 export default function Home() {
-
   const router = useRouter();
-  const [errorState, setError] = useState(null)
+  const [errorState, setErrorState] = useState(null);
+  const [isErrorShown, setIsErrorShown] = useState(false);
 
   useEffect(() => {
     const { error } = router.query;
 
-    if (!error && router.asPath.includes('?error=')) {
-
-      const queryString = router.asPath.split('?')[1];
-      const params = new URLSearchParams(queryString);
-      const errorValue = params.get('error');
-
-      if (!errorValue) {
-        router.push('/');
-      }
-
-      setError(errorValue)
-
-      if (errorState) {
-        showError(errorValue)
-      }
-
-    } else if (!error) {
-      router.push('/');
+    if (error) {
+      setErrorState(error);
+      setIsErrorShown(true);
     }
-  }, [errorState, router]);
 
+  }, [router]);
 
-  const showError = (msg) => toast.error(msg, {
-    style: {
-      background: '#E93E40',
-      color: 'white'
+  useEffect(() => {
+    if (errorState && isErrorShown) {
+      showError(errorState);
     }
-  })
+  }, [errorState, isErrorShown]);
+
+  const showError = (msg) => {
+    toast.error(msg, {
+      style: {
+        background: '#E93E40',
+        color: 'white'
+      }
+    });
+  };
 
   return (
     <Layout>
@@ -47,6 +40,6 @@ export default function Home() {
         <img src="/cv_ilustration.svg" alt="ilustracion de infojobs" className="w-4/5 sm:max-w-xl" />
         <Login />
       </main>
-    </ Layout>
-  )
+    </Layout>
+  );
 }
