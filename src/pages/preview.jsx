@@ -2,8 +2,12 @@ import Layout from "@/components/Layout";
 import { useState } from "react";
 
 export default function Preview() {
-  const [actualColor, setActualColor] = useState("white");
-  const [hidden, setHidden] = useState("border-2 border-black hidden");
+  const [actualColor, setActualColor] = useState("red-300");
+  const [hidden, setHidden] = useState({
+    optionOne: "",
+    optionTwo: "hidden",
+    optionThree: "hidden",
+  });
   const [data, setData] = useState({
     //SCOPE -> candidate_read_curriculum_skills
     //get/curriculum/{curriculumId}/skill
@@ -74,10 +78,25 @@ export default function Preview() {
     var id = event.target.id;
     switch (id) {
       case "optionOne":
+        setHidden({
+          optionOne: "",
+          optionTwo: "hidden",
+          optionThree: "hidden",
+        });
         break;
       case "optionTwo":
+        setHidden({
+          optionOne: "hidden",
+          optionTwo: "",
+          optionThree: "hidden",
+        });
         break;
       case "optionThree":
+        setHidden({
+          optionOne: "hidden",
+          optionTwo: "hidden",
+          optionThree: "",
+        });
         break;
     }
   }
@@ -101,16 +120,6 @@ export default function Preview() {
     }
   }
 
-  function myFunction(event) {
-    event.preventDefault();
-    var x = event.target.id;
-    if (hidden === "border-2 border-black hidden") {
-      setHidden("border-2 border-black inline");
-    } else {
-      setHidden("border-2 border-black hidden");
-    }
-  }
-
   return (
     <Layout>
       <main>
@@ -124,114 +133,121 @@ export default function Preview() {
         <br />
 
         {/*Full container*/}
-        <div className="grid grid-cols-6 gap-1">
+        <div className="grid grid-cols-6 gap-1 md:pl-2 sm:pl-2 xs:pl-1">
           {/*Preview container*/}
-          <div className="col-span-4 border-2 border-orange-800 h-full md:p-2 sm:p-2 xs:p-1">
-            {/*FIRST OPRTION*/}
-            <div className="grid grid-cols-6 gap-1 h-full">
-              {/*border-2 border-pink-600*/}
+          <div className="col-span-4 border-2 border-black">
+            {/*border-2 border-orange-800 h-full md:p-2 sm:p-2 xs:p-1*/}
+            {/*FIRST OPTION*/}
+            <div
+              className={`grid grid-cols-6 gap-1 h-full ${hidden.optionOne}`}
+            >
               {/*First col*/}
               <div
                 id="change"
-                className={`col-span-2 border-2 border-green-800 bg-${actualColor} md:p-2 sm:p-2 xs:p-1`}
+                className={`col-span-2 border-2 border-${actualColor} bg-${actualColor} md:p-2 sm:p-2 xs:p-1`}
               >
                 {/*Name*/}
                 <div className="md:pt-4 sm:pt-2 xs:pt-1 md:text-center sm:text-center xs:text-center">
-                  <span className="font-mono block font-bold md:text-xl sm:text-base xs:text-xs">
+                  <span className="font-mono block text-black font-bold md:text-xl sm:text-base xs:text-xs">
                     {data.name}
                   </span>
                   {/*Position*/}
-                  <span className="font-mono block md:text-lg sm:text-sm xs:text-xxs">
+                  <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xxs">
                     {data.preferredPosition}
                   </span>
                 </div>
-                <div></div>
                 {/*Line*/}
                 <div className="relative flex py-1 items-center">
-                  <div className="flex-grow border-t border-gray-400"></div>
-                  <span className="flex-shrink mx-1 font-mono md:text-xl sm:text-sm xs:text-xs">
+                  <div className="flex-grow border-t border-slate-900"></div>
+                  <span className="flex-shrink text-slate-900 mx-1 font-mono md:text-xl sm:text-sm xs:text-xs">
                     ⧫
                   </span>
-                  <div className="flex-grow border-t border-gray-400"></div>
+                  <div className="flex-grow border-t border-slate-900"></div>
                 </div>
                 {/*Container info*/}
                 <div className="md:pl-5 md:pr-2 sm:pl-2 sm:pr-2 xs:pl-1 xs:pr-1">
-                  <span className="font-mono block font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
+                  <span className="font-mono block text-black font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
                     DATOS PERSONALES
                   </span>
-                  <span className="font-mono block font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
+                  <span className="font-mono block text-black font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
                     Teléfono
                   </span>
-                  <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                  <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                     {data.mobile_phone}
                   </span>
-                  <span className="font-mono block font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
+                  <span className="font-mono block text-black font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
                     Lugar de residencia
                   </span>
-                  <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                  <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                     {data.country_province}
                   </span>
-                  <span className="font-mono block font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
+                  <span className="font-mono block text-black font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
                     Nacionalidad
                   </span>
-                  <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                  <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                     {data.nationalities}
                   </span>
                 </div>
               </div>
               {/*Second col*/}
-              <div className="col-span-4 border-2 border-amber-500 pb-5">
-                {/*md:pl-2 sm:pl-2 xs:pl-1*/}
+              <div className="col-span-4 pb-5">
+                {/*border-2 border-amber-500*/}
                 <div className="md:pl-5 md:pr-2 sm:pl-2 sm:pr-2 xs:pl-1 xs:pr-1">
                   {/*Experience*/}
                   <div
                     id="change"
                     className={`border-2 border-${actualColor} text-center mt-4 mb-4`}
                   >
-                    <span className="font-mono block font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
+                    <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       EXPERIENCIA
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
                     <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li>{data.company}</li>
+                      <li id="change" className={`text-${actualColor}`}>
+                        <span className="text-black">{data.company}</span>
+                      </li>
                     </span>
-                    <span className="font-mono block italic md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
                       {data.job}
                     </span>
-                    <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                       ({data.startingDate_experience}/
                       {data.finishingDate_experience})
                     </span>
-                    <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                       {data.description}
                     </span>
                     {/***/}
                     <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li>{data.company}</li>
+                      <li id="change" className={`text-${actualColor}`}>
+                        <span className="text-black">{data.company}</span>
+                      </li>
                     </span>
-                    <span className="font-mono block italic md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
                       {data.job}
                     </span>
-                    <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                       ({data.startingDate_experience}/
                       {data.finishingDate_experience})
                     </span>
-                    <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                       {data.description}
                     </span>
                     {/***/}
                     <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li>{data.company}</li>
+                      <li id="change" className={`text-${actualColor}`}>
+                        <span className="text-black">{data.company}</span>
+                      </li>
                     </span>
-                    <span className="font-mono block italic md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
                       {data.job}
                     </span>
-                    <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                       ({data.startingDate_experience}/
                       {data.finishingDate_experience})
                     </span>
-                    <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                       {data.description}
                     </span>
                   </div>
@@ -240,51 +256,67 @@ export default function Preview() {
                     id="change"
                     className={`border-2 border-${actualColor} text-center mt-4 mb-4`}
                   >
-                    <span className="font-mono block font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
+                    <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       EDUCACIÓN
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
                     <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li>{data.institutionName}</li>
+                      <li id="change" className={`text-${actualColor}`}>
+                        <span className="text-black">
+                          {data.institutionName}
+                        </span>
+                      </li>
                     </span>
-                    <span className="font-mono block italic md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
                       {data.courseName}
                     </span>
-                    <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                       ({data.startingDate_education}/
                       {data.finishingDate_education})
                     </span>
                     {/***/}
                     <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li>{data.institutionName}</li>
+                      <li id="change" className={`text-${actualColor}`}>
+                        <span className="text-black">
+                          {data.institutionName}
+                        </span>
+                      </li>
                     </span>
-                    <span className="font-mono block italic md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
                       {data.courseName}
                     </span>
-                    <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                       ({data.startingDate_education}/
                       {data.finishingDate_education})
                     </span>
                     {/***/}
                     <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li>{data.institutionName}</li>
+                      <li id="change" className={`text-${actualColor}`}>
+                        <span className="text-black">
+                          {data.institutionName}
+                        </span>
+                      </li>
                     </span>
-                    <span className="font-mono block italic md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
                       {data.courseName}
                     </span>
-                    <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                       ({data.startingDate_education}/
                       {data.finishingDate_education})
                     </span>
                     {/***/}
                     <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li>{data.institutionName}</li>
+                      <li id="change" className={`text-${actualColor}`}>
+                        <span className="text-black">
+                          {data.institutionName}
+                        </span>
+                      </li>
                     </span>
-                    <span className="font-mono block italic md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
                       {data.courseName}
                     </span>
-                    <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                       ({data.startingDate_education}/
                       {data.finishingDate_education})
                     </span>
@@ -294,35 +326,43 @@ export default function Preview() {
                     id="change"
                     className={`border-2 border-${actualColor} text-center mt-4 mb-4`}
                   >
-                    <span className="font-mono block font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
+                    <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       IDIOMAS
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
                     {/*ALL LANGUAGES*/}
                     <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
-                      {data.languages[0].id}
+                      <li id="change" className={`text-${actualColor}`}>
+                        <span className="text-black">
+                          {data.languages[0].id}
+                        </span>
+                      </li>
                     </span>
-                    <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                       Habla:{data.languages[0].speaking}
                     </span>
-                    <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                       Lectura:{data.languages[0].reading}
                     </span>
-                    <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                       Escritura:{data.languages[0].writing}
                     </span>
                     {/******/}
                     <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
-                      {data.languages[1].id}
+                      <li id="change" className={`text-${actualColor}`}>
+                        <span className="text-black">
+                          {data.languages[1].id}
+                        </span>
+                      </li>
                     </span>
-                    <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                       Habla:{data.languages[1].speaking}
                     </span>
-                    <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                       Lectura:{data.languages[1].reading}
                     </span>
-                    <span className="font-mono block md:text-lg sm:text-sm xs:text-xs">
+                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
                       Escritura:{data.languages[1].writing}
                     </span>
                     {/*ALL LANGUAGES*/}
@@ -331,10 +371,18 @@ export default function Preview() {
               </div>
             </div>
             {/*FINISH FIRST OPTION*/}
+            {/*SECOND OPTION*/}
+            <div className={`border-2 border-violet-800 ${hidden.optionTwo}`}>
+              ESTA ES LA SEGUNDA OPCION
+            </div>
+            {/*THIRD OPTION*/}
+            <div className={`border-2 border-yellow-500 ${hidden.optionThree}`}>
+              ESTA ES LA TERCERA OPCION
+            </div>
           </div>
           {/*Options col*/}
           <div className="col-span-2 border-2 border-blue-800 md:p-2 sm:p-2 xs:p-1">
-            <span className="font-mono block font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
+            <span className="font-mono block text-black font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
               Seleccione estilo de CV
             </span>
             <div>
@@ -361,7 +409,7 @@ export default function Preview() {
               </button>
             </div>
 
-            <span className="font-mono block font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
+            <span className="font-mono block text-black font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
               Seleccione un color
             </span>
             <div className="border-2 border-red-800 flex justify-center mt-5 md:h-16 xs:h-11">
@@ -403,15 +451,7 @@ export default function Preview() {
             </div>
           </div>
         </div>
-
         <br />
-        <div className={actualColor}>HOLA</div>
-
-        <button onClick={(e) => myFunction(e)}>Clickeame</button>
-
-        <div className={hidden} id="myDIV">
-          Este elemento aparece y desaparece con el botón
-        </div>
       </main>
     </Layout>
   );
