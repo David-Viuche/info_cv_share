@@ -149,12 +149,12 @@ export default function Preview() {
             {/*border-2 border-orange-800 h-full md:p-2 sm:p-2 xs:p-1*/}
             {/*FIRST OPTION*/}
             <div
-              className={`grid grid-cols-6 gap-1 h-full ${hidden.optionOne}`}
+              className={`grid grid-cols-8 gap-1 h-full ${hidden.optionOne}`}
             >
               {/*First col*/}
               <div
                 id="change"
-                className={`col-span-2 border-2  md:p-2 sm:p-2 xs:p-1 ${actualColor[0]} ${actualColor[1]}`}
+                className={`col-span-3 border-2  md:p-2 sm:p-2 xs:p-1 ${actualColor[0]} ${actualColor[1]}`}
               >
                 {/*${actualColor[0]} ${actualColor[1]}  bg-${actualColor} bg-red-300*/}
                 {/*Name*/}
@@ -176,7 +176,7 @@ export default function Preview() {
                   <div className="flex-grow border-t border-slate-900"></div>
                 </div>
                 {/*Container info*/}
-                <div className="md:pl-5 md:pr-2 sm:pl-2 sm:pr-2 xs:pl-1 xs:pr-1">
+                <div className="md:pl-5 md:pr-2 sm:pl-2 sm:pr-2 xs:pl-0 xs:pr-0">
                   <span className="font-mono block text-black font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
                     DATOS PERSONALES
                   </span>
@@ -201,7 +201,7 @@ export default function Preview() {
                 </div>
               </div>
               {/*Second col*/}
-              <div className="col-span-4 pb-5">
+              <div className="col-span-5 pb-5">
                 {/*border-2 border-amber-500*/}
                 <div className="md:pl-5 md:pr-2 sm:pl-2 sm:pr-2 xs:pl-1 xs:pr-1">
                   {/*Experience*/}
