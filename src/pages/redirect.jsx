@@ -40,9 +40,9 @@ export default function Redirect() {
 
                     let data = await fetchToken(code)
 
-                    console.log(data);
+                    console.log("redirect", data);
 
-                    if (data.error) {
+                    if (!data?.access_token) {
                         const error = 'Error en inicio de sesion. Intente de nuevo.';
                         const encodedError = encodeURIComponent(error);
                         const url = `/?error=${encodedError}`;

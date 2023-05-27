@@ -65,5 +65,12 @@ export const getToken = async () => {
 
     }
 
+    access_token = sessionStorage.getItem('access_token');
+
     return access_token
+}
+
+export const deleteToken = async () => {
+    sessionStorage.removeItem('access_token');
+    sessionStorage.removeItem('refresh_token');
 }

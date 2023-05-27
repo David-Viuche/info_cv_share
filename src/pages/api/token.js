@@ -8,7 +8,7 @@ export default async function handler(req, res) {
             try {
                 const response = await fetch(urlToken, { method: 'POST' });
                 const data = await response.json();
-                console.log(data);
+                //console.log(data);
                 res.status(200).json(data);
             } catch (error) {
                 console.log(' 2 Error fetching data:', error);
