@@ -1,8 +1,14 @@
 import Layout from "@/components/Layout";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Preview() {
-  const [actualColor, setActualColor] = useState("red-300");
+  //const [actualColor, setActualColor] = useState("red-300"); //red-300
+  const [actualColor, setActualColor] = useState([
+    "bg-red-300",
+    "border-red-300",
+    "text-red-300",
+  ]);
+  const [Text, setText] = useState("");
   const [hidden, setHidden] = useState({
     optionOne: "",
     optionTwo: "hidden",
@@ -106,16 +112,20 @@ export default function Preview() {
     var id = event.target.id;
     switch (id) {
       case "red":
-        setActualColor("red-300");
+        setActualColor(["bg-red-300", "border-red-300", "text-red-300"]);
         break;
       case "blue":
-        setActualColor("blue-300");
+        setActualColor(["bg-blue-300", "border-blue-300", "text-blue-300"]);
         break;
       case "orange":
-        setActualColor("orange-300");
+        setActualColor([
+          "bg-orange-300",
+          "border-orange-300",
+          "text-orange-300",
+        ]);
         break;
       case "green":
-        setActualColor("green-300");
+        setActualColor(["bg-green-300", "border-green-300", "text-green-300"]);
         break;
     }
   }
@@ -144,8 +154,9 @@ export default function Preview() {
               {/*First col*/}
               <div
                 id="change"
-                className={`col-span-2 border-2 border-${actualColor} bg-${actualColor} md:p-2 sm:p-2 xs:p-1`}
+                className={`col-span-2 border-2  md:p-2 sm:p-2 xs:p-1 ${actualColor[0]} ${actualColor[1]}`}
               >
+                {/*${actualColor[0]} ${actualColor[1]}  bg-${actualColor} bg-red-300*/}
                 {/*Name*/}
                 <div className="md:pt-4 sm:pt-2 xs:pt-1 md:text-center sm:text-center xs:text-center">
                   <span className="font-mono block text-black font-bold md:text-xl sm:text-base xs:text-xs">
@@ -196,15 +207,16 @@ export default function Preview() {
                   {/*Experience*/}
                   <div
                     id="change"
-                    className={`border-2 border-${actualColor} text-center mt-4 mb-4`}
+                    className={` border-2 ${actualColor[0]} ${actualColor[1]} text-center mt-4 mb-4`}
                   >
-                    <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
+                    {/*shadow-[0_1px_0px_0px_rgba(0,0,0,0.3)]*/}
+                    <span className="font-mono block shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       EXPERIENCIA
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
                     <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`text-${actualColor}`}>
+                      <li id="change" className={`${actualColor[2]}`}>
                         <span className="text-black">{data.company}</span>
                       </li>
                     </span>
@@ -220,7 +232,7 @@ export default function Preview() {
                     </span>
                     {/***/}
                     <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`text-${actualColor}`}>
+                      <li id="change" className={`${actualColor[2]}`}>
                         <span className="text-black">{data.company}</span>
                       </li>
                     </span>
@@ -236,7 +248,7 @@ export default function Preview() {
                     </span>
                     {/***/}
                     <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`text-${actualColor}`}>
+                      <li id="change" className={`${actualColor[2]}`}>
                         <span className="text-black">{data.company}</span>
                       </li>
                     </span>
@@ -254,7 +266,7 @@ export default function Preview() {
                   {/*Education*/}
                   <div
                     id="change"
-                    className={`border-2 border-${actualColor} text-center mt-4 mb-4`}
+                    className={`border-2 shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] ${actualColor[0]} ${actualColor[1]} text-center mt-4 mb-4`}
                   >
                     <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       EDUCACIÓN
@@ -262,7 +274,7 @@ export default function Preview() {
                   </div>
                   <div className="pl-3 pr-3">
                     <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`text-${actualColor}`}>
+                      <li id="change" className={`${actualColor[2]}`}>
                         <span className="text-black">
                           {data.institutionName}
                         </span>
@@ -277,7 +289,7 @@ export default function Preview() {
                     </span>
                     {/***/}
                     <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`text-${actualColor}`}>
+                      <li id="change" className={`${actualColor[2]}`}>
                         <span className="text-black">
                           {data.institutionName}
                         </span>
@@ -292,7 +304,7 @@ export default function Preview() {
                     </span>
                     {/***/}
                     <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`text-${actualColor}`}>
+                      <li id="change" className={`${actualColor[2]}`}>
                         <span className="text-black">
                           {data.institutionName}
                         </span>
@@ -307,7 +319,7 @@ export default function Preview() {
                     </span>
                     {/***/}
                     <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`text-${actualColor}`}>
+                      <li id="change" className={`${actualColor[2]}`}>
                         <span className="text-black">
                           {data.institutionName}
                         </span>
@@ -324,16 +336,16 @@ export default function Preview() {
                   {/*Language*/}
                   <div
                     id="change"
-                    className={`border-2 border-${actualColor} text-center mt-4 mb-4`}
+                    className={`border-2 ${actualColor[0]} ${actualColor[1]} text-center mt-4 mb-4`}
                   >
-                    <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
+                    <span className="font-mono block shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       IDIOMAS
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
                     {/*ALL LANGUAGES*/}
                     <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`text-${actualColor}`}>
+                      <li id="change" className={`${actualColor[2]}`}>
                         <span className="text-black">
                           {data.languages[0].id}
                         </span>
@@ -350,7 +362,7 @@ export default function Preview() {
                     </span>
                     {/******/}
                     <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`text-${actualColor}`}>
+                      <li id="change" className={`${actualColor[2]}`}>
                         <span className="text-black">
                           {data.languages[1].id}
                         </span>
