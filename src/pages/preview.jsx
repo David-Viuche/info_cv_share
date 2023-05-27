@@ -382,70 +382,72 @@ export default function Preview() {
           </div>
           {/*Options col*/}
           <div className="col-span-2 border-2 border-blue-800 md:p-2 sm:p-2 xs:p-1">
-            <span className="font-mono block text-black font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
-              Seleccione estilo de CV
-            </span>
-            <div>
-              <button
-                id="optionOne"
-                className="border-2 border-blue-800"
-                onClick={(e) => showCV(e)}
-              >
-                UNO
-              </button>
-              <button
-                id="optionTwo"
-                className="border-2 border-blue-800"
-                onClick={(e) => showCV(e)}
-              >
-                DOS
-              </button>
-              <button
-                id="optionThree"
-                className="border-2 border-blue-800"
-                onClick={(e) => showCV(e)}
-              >
-                TRES
-              </button>
-            </div>
+            <div className="md:pl-5 md:pr-2 sm:pl-2 sm:pr-2 xs:pl-1 xs:pr-1">
+              <span className="font-mono block text-black font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
+                Seleccione estilo de CV
+              </span>
+              <div>
+                <button
+                  id="optionOne"
+                  className="border-2 border-blue-800"
+                  onClick={(e) => showCV(e)}
+                >
+                  UNO
+                </button>
+                <button
+                  id="optionTwo"
+                  className="border-2 border-blue-800"
+                  onClick={(e) => showCV(e)}
+                >
+                  DOS
+                </button>
+                <button
+                  id="optionThree"
+                  className="border-2 border-blue-800"
+                  onClick={(e) => showCV(e)}
+                >
+                  TRES
+                </button>
+              </div>
 
-            <span className="font-mono block text-black font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
-              Seleccione un color
-            </span>
-            <div className="border-2 border-red-800 flex justify-center mt-5 md:h-16 xs:h-11">
-              <div className="border-4 border-violet-800 flex justify-center md:w-3/12 xs:w-3/5">
-                {" "}
-                {/*border-2 border-violet-800 flex justify-center md::w-3/12 sm::w-screen*/}
-                <div className="flex justify-center border-2 rounded-full border-black w-3/4">
+              <span className="font-mono block text-black font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
+                Seleccione un color
+              </span>
+              <div className="border-2 border-red-800 flex justify-center mt-5 md:h-16 xs:h-11">
+                <div className="border-4 border-violet-800 flex justify-center md:w-3/12 xs:w-3/5">
                   {" "}
-                  {/*w-3/4*/}
-                  <button
-                    id="red"
-                    className="font-mono border-2 border-black mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-red-500 hover:bg-red-600 duration-300"
-                    title="Finanzas, Banca, Seguros"
-                    onClick={(e) => changeColor(e)}
-                  >
-                    {/*max-w-md p-4 mx-auto mt-4 bg-gray-200 sm:shadow-md sm::rounded-md sm:bg-gray-100 sm:p-6 md:bg-green-800*/}
-                    {/*font-mono border-2 border-black p-2 m-3 w-1/6 rounded-full bg-red-500 hover:bg-cyan-600 duration-300*/}
-                  </button>
-                  <button
-                    id="blue"
-                    className="font-mono border-2 border-black mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-blue-500 hover:bg-blue-600 duration-300"
-                    onClick={(e) => changeColor(e)}
-                    title="Profesionales IT, Directivos, Gestores"
-                  ></button>
-                  <button
-                    id="orange"
-                    className="font-mono border-2 border-black mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-orange-500 hover:bg-orange-600 duration-300"
-                    onClick={(e) => changeColor(e)}
-                    title="Marketing, Hostelería, Cocinero, Pastelero"
-                  ></button>
-                  <button
-                    id="green"
-                    className="font-mono border-2 border-black mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-green-500 hover:bg-green-600 duration-300"
-                    onClick={(e) => changeColor(e)}
-                    title="Medio ambiente, Ecología"
-                  ></button>
+                  {/*border-2 border-violet-800 flex justify-center md::w-3/12 sm::w-screen*/}
+                  <div className="flex justify-center border-2 rounded-full border-black w-3/4">
+                    {" "}
+                    {/*w-3/4*/}
+                    <button
+                      id="red"
+                      className="font-mono border-2 border-black mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-red-500 hover:bg-red-600 duration-300"
+                      title="Finanzas, Banca, Seguros"
+                      onClick={(e) => changeColor(e)}
+                    >
+                      {/*max-w-md p-4 mx-auto mt-4 bg-gray-200 sm:shadow-md sm::rounded-md sm:bg-gray-100 sm:p-6 md:bg-green-800*/}
+                      {/*font-mono border-2 border-black p-2 m-3 w-1/6 rounded-full bg-red-500 hover:bg-cyan-600 duration-300*/}
+                    </button>
+                    <button
+                      id="blue"
+                      className="font-mono border-2 border-black mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-blue-500 hover:bg-blue-600 duration-300"
+                      onClick={(e) => changeColor(e)}
+                      title="Profesionales IT, Directivos, Gestores"
+                    ></button>
+                    <button
+                      id="orange"
+                      className="font-mono border-2 border-black mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-orange-500 hover:bg-orange-600 duration-300"
+                      onClick={(e) => changeColor(e)}
+                      title="Marketing, Hostelería, Cocinero, Pastelero"
+                    ></button>
+                    <button
+                      id="green"
+                      className="font-mono border-2 border-black mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-green-500 hover:bg-green-600 duration-300"
+                      onClick={(e) => changeColor(e)}
+                      title="Medio ambiente, Ecología"
+                    ></button>
+                  </div>
                 </div>
               </div>
             </div>
