@@ -629,13 +629,19 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Habla:{data.languages[0].speaking}
+                      Habla:
+                      <br />
+                      {data.languages[0].speaking}
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Lectura:{data.languages[0].reading}
+                      Lectura:
+                      <br />
+                      {data.languages[0].reading}
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Escritura:{data.languages[0].writing}
+                      Escritura:
+                      <br />
+                      {data.languages[0].writing}
                     </span>
                     {/******/}
                     <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
@@ -646,13 +652,19 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Habla:{data.languages[1].speaking}
+                      Habla:
+                      <br />
+                      {data.languages[1].speaking}
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Lectura:{data.languages[1].reading}
+                      Lectura:
+                      <br />
+                      {data.languages[1].reading}
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Escritura:{data.languages[1].writing}
+                      Escritura:
+                      <br />
+                      {data.languages[1].writing}
                     </span>
                     {/*ALL LANGUAGES*/}
                   </div>
@@ -874,13 +886,19 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Habla:{data.languages[0].speaking}
+                      Habla:
+                      <br />
+                      {data.languages[0].speaking}
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Lectura:{data.languages[0].reading}
+                      Lectura:
+                      <br />
+                      {data.languages[0].reading}
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Escritura:{data.languages[0].writing}
+                      Escritura:
+                      <br />
+                      {data.languages[0].writing}
                     </span>
                     {/******/}
                     <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
@@ -891,13 +909,19 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Habla:{data.languages[1].speaking}
+                      Habla:
+                      <br />
+                      {data.languages[1].speaking}
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Lectura:{data.languages[1].reading}
+                      Lectura:
+                      <br />
+                      {data.languages[1].reading}
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Escritura:{data.languages[1].writing}
+                      Escritura:
+                      <br />
+                      {data.languages[1].writing}
                     </span>
                     {/*ALL LANGUAGES*/}
                   </div>
