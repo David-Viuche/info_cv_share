@@ -1,70 +1,49 @@
 import Layout from '@/components/Layout';
 import { fetchToken } from '@/helpers/getToken';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function Redirect() {
     const router = useRouter();
-    const [code, setCode] = useState(null)
 
     useEffect(() => {
         const { code } = router.query;
 
-        if (!code && router.asPath.includes('?code=')) {
-
-            const queryString = router.asPath.split('?')[1];
-            const params = new URLSearchParams(queryString);
-            const codeValue = params.get('code');
-
-            if (!codeValue) {
-                sessionStorage.removeItem('access_token');
-                sessionStorage.removeItem('refresh_token');
-                router.push('/');
-            }
-
-            setCode(codeValue)
-
-        } else if (!code) {
-            sessionStorage.removeItem('access_token');
-            sessionStorage.removeItem('refresh_token');
-            router.push('/');
-        }
-    }, [router]);
-
-
-    useEffect(() => {
-
         if (code) {
-            const fetchData = async (code) => {
+            const fetchData = async () => {
                 try {
+                    try {
 
-                    let data = await fetchToken(code)
+                        let data = await fetchToken(code)
 
-                    console.log("redirect", data);
+                        console.log("redirect", data);
 
-                    if (!data?.access_token) {
-                        const error = 'Error en inicio de sesion. Intente de nuevo.';
-                        const encodedError = encodeURIComponent(error);
-                        const url = `/?error=${encodedError}`;
-                        sessionStorage.removeItem('access_token');
-                        sessionStorage.removeItem('refresh_token');
-                        window.location.href = url;
+                        if (data.error) {
+                            const error = 'Error en inicio de sesion. Intente de nuevo.';
+                            const encodedError = encodeURIComponent(error);
+                            const url = `/?error=${encodedError}`;
+                            sessionStorage.removeItem('access_token');
+                            sessionStorage.removeItem('refresh_token');
+                            window.location.href = url;
+                        }
+
+                        sessionStorage.setItem('access_token', data?.access_token);
+                        sessionStorage.setItem('refresh_token', data?.refresh_token);
+
+                        router.push('/')
+
+                    } catch (error) {
+                        console.log('Error fetching data:', error);
                     }
 
-                    sessionStorage.setItem('access_token', data?.access_token);
-                    sessionStorage.setItem('refresh_token', data?.refresh_token);
-
-                    router.push('/')
-
                 } catch (error) {
-                    console.log('Error fetching data:', error);
+                    console.error('Error al enviar la solicitud:', error);
                 }
             };
 
-            fetchData(code)
+            fetchData();
         }
-
-    }, [code, router])
+    }, [router.query]);
 
     return (
         <Layout>

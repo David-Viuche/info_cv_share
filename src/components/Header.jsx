@@ -1,13 +1,46 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { HeaderLink } from './HeaderLink'
 import { AiOutlineCloseSquare } from 'react-icons/ai/index.js'
 import { TfiMenuAlt } from 'react-icons/tfi/index.js'
+import { deleteToken, getToken } from "@/helpers/getToken";
+import { fetchUserData } from "@/helpers/fetchUserData";
 
 export const Header = ({ children }) => {
     const [isOpen, setisOpen] = useState(false)
+    const [user, setUser] = useState(null)
 
     function handleOnclick() {
         setisOpen(open => !open)
+    }
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+
+            const currentToken = await getToken()
+
+            if (currentToken.error) {
+                return setUser(null)
+            }
+
+            const user = await fetchUserData(currentToken)
+
+            let newUser = {
+                photo: user.photo,
+                name: user.name
+            }
+
+            setUser(newUser)
+
+        }
+
+        fetchData()
+
+    }, [])
+
+    const handleOnclickCerrarSesion = () => {
+        deleteToken()
+        setUser(null)
     }
 
     return (
@@ -26,6 +59,19 @@ export const Header = ({ children }) => {
                 <ul className='flex flex-col justify-center items-center gap-5 text-center w-full sm:flex-row sm:h-14'>
                     <HeaderLink href='/' ariaLabel='redirección a la página principal'>Inicio</HeaderLink>
                     <HeaderLink href='/preview' ariaLabel='redirección a la pagina de Previsualizar'>Previsualizar CV</HeaderLink>
+                    {
+                        user ?
+                            <div className="flex items-center justify-center gap-4">
+
+                                <h1>
+                                    {user.name}
+                                </h1>
+
+                                <button onClick={handleOnclickCerrarSesion} className="bg-red-500 p-2 rounded-md text-white hover:bg-red-300 ">Cerrar Sesión</button>
+
+                            </div>
+                            : ''
+                    }
                 </ul>
             </nav>
         </header>

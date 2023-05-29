@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { toast } from 'sonner';
 
 export default function Home() {
+
   const router = useRouter();
   const [errorState, setErrorState] = useState(null);
   const [isErrorShown, setIsErrorShown] = useState(false);
@@ -45,8 +46,6 @@ export default function Home() {
 
       const currentToken = await getToken()
 
-      console.log(currentToken)
-
       if (currentToken.error) {
         return setUser(null)
       }
@@ -60,18 +59,11 @@ export default function Home() {
 
       setUser(newUser)
 
-      console.log(newUser)
-
     }
 
     fetchData()
 
   }, [])
-
-  const handleOnclick = () => {
-    deleteToken()
-    setUser(null)
-  }
 
   return (
     <Layout>
@@ -79,13 +71,11 @@ export default function Home() {
         <img src="/cv_ilustration.svg" alt="ilustracion de infojobs" className="w-4/5 sm:max-w-xl" />
         {
           user ?
-            <div>
+            <div className="flex flex-col items-center justify-center gap-4">
 
-              <h1>
-                {`Usuario: ${user.name}`}
+              <h1 className="text-2xl">
+                {`Hola! ${user.name}`}
               </h1>
-
-              <button onClick={handleOnclick} className="bg-red-500 p-2 rounded-md text-white hover:bg-red-300">Cerrar Sesión</button>
 
             </div>
             : <Login />
