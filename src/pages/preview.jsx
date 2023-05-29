@@ -127,6 +127,14 @@ export default function Preview() {
       case "green":
         setActualColor(["bg-green-300", "border-green-300", "text-green-300"]);
         break;
+
+      case "violet":
+        setActualColor([
+          "bg-violet-300",
+          "border-violet-300",
+          "text-violet-300",
+        ]);
+        break;
     }
   }
 
@@ -975,33 +983,42 @@ export default function Preview() {
                   Seleccione estilo de CV
                 </span>
               </div>
-              <div className="border-2 border-violet-500 flex justify-center">
-                <button
-                  id="optionOne"
-                  className="border-2 border-blue-800 mx-auto my-auto"
-                  onClick={(e) => showCV(e)}
-                >
-                  UNO
-                </button>
-                <button
-                  id="optionTwo"
-                  className="border-2 border-blue-800 mx-auto my-auto"
-                  onClick={(e) => showCV(e)}
-                >
-                  DOS
-                </button>
-                <button
-                  id="optionThree"
-                  className="border-2 border-blue-800 mx-auto my-auto"
-                  onClick={(e) => showCV(e)}
-                >
-                  TRES
-                </button>
+              <div className="flex justify-center md:h-16 sm: xs:h-11">
+                <div className="flex justify-center border-2 rounded-full shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] bg-gray-200 border-black md:w-3/4 sm: xs:w-full">
+                  {/*border-2 border-violet-500 flex justify-center */}
+                  {/*flex justify-center border-2 rounded-full shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] bg-gray-200 border-black md:w-3/4 sm: xs:w-full*/}
+                  <button
+                    id="optionOne"
+                    className="font-mono text-black shadow-[0_4px_5px_0px_rgba(0,0,0,0.3)] mx-auto my-auto rounded-2xl border-2 border-blue-300 bg-blue-300 hover:bg-blue-400 hover:border-blue-400 duration-300 md:p-3 md:text-base md:w-1/6 md:h-4/5 sm:p-1 sm:text-sm sm:h-4/6 sm:w-1/4 xs:p-1 xs:text-xs xs:w-1/4 xs:rounded-lg"
+                    onClick={(e) => showCV(e)}
+                    title="Estilo uno"
+                  >
+                    1
+                  </button>
+                  <button
+                    id="optionTwo"
+                    className="font-mono text-black shadow-[0_4px_5px_0px_rgba(0,0,0,0.3)] mx-auto my-auto rounded-2xl border-2 border-blue-300 bg-blue-300 hover:bg-blue-400 hover:border-blue-400 duration-300 md:p-3 md:text-base md:w-1/6 md:h-4/5 sm:p-1 sm:text-sm sm:h-4/6 sm:w-1/4 xs:p-1 xs:text-xs xs:w-1/4 xs:rounded-lg"
+                    onClick={(e) => showCV(e)}
+                    title="Estilo dos"
+                  >
+                    2
+                  </button>
+                  <button
+                    id="optionThree"
+                    className="font-mono text-black shadow-[0_4px_5px_0px_rgba(0,0,0,0.3)] mx-auto my-auto rounded-2xl border-2 border-blue-300 bg-blue-300 hover:bg-blue-400 hover:border-blue-400 duration-300 md:p-3 md:text-base md:w-1/6 md:h-4/5 sm:p-1 sm:text-sm sm:h-4/6 sm:w-1/4 xs:p-1 xs:text-xs xs:w-1/4 xs:rounded-lg"
+                    onClick={(e) => showCV(e)}
+                    title="Estilo tres"
+                  >
+                    3
+                  </button>
+                </div>
               </div>
 
-              <span className="font-mono block shadow-[0_3px_5px_0px_rgba(0,0,0,0.3)] border-slate-300 bg-slate-300 text-black font-bold p-1 md:mt-10 md:mb-10 md:text-xl sm:mt-5 sm:mb-5 sm:text-base xs:mt-3 xs:mb-3 xs:text-xs">
-                Seleccione un color
-              </span>
+              <div className="border-2 border-slate-300 bg-slate-300 md:mt-10 md:mb-10 sm:mt-5 sm:mb-5 xs:mt-3 xs:mb-3">
+                <span className="font-mono block shadow-[0_3px_5px_0px_rgba(0,0,0,0.3)] text-black font-bold p-1 md:text-xl sm:text-base xs:text-xs ">
+                  Seleccione color de CV
+                </span>
+              </div>
               <div className="flex justify-center md:h-16 sm: xs:h-11">
                 {/*border-2 border-red-800 flex justify-center md:h-16 sm: xs:h-11*/}
                 <div className="flex justify-center md:w-3/5 sm:w-3/4 xs:w-full">
@@ -1009,7 +1026,7 @@ export default function Preview() {
                   <div className="flex justify-center border-2 rounded-full shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] bg-gray-200 border-black md:w-3/4 sm: xs:w-full">
                     <button
                       id="red"
-                      className="font-mono shadow-[0_4px_5px_0px_rgba(0,0,0,0.3)] border-2 border-red-500 mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-red-500 hover:bg-red-600 duration-300"
+                      className="font-mono shadow-[0_4px_5px_0px_rgba(0,0,0,0.3)] border-2 border-red-500 mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-red-500 hover:bg-red-600 hover:border-red-600 duration-300"
                       title="Finanzas, Banca, Seguros"
                       onClick={(e) => changeColor(e)}
                     >
@@ -1018,31 +1035,42 @@ export default function Preview() {
                     </button>
                     <button
                       id="blue"
-                      className="font-mono shadow-[0_4px_5px_0px_rgba(0,0,0,0.3)] border-2 border-blue-500 mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-blue-500 hover:bg-blue-600 duration-300"
+                      className="font-mono shadow-[0_4px_5px_0px_rgba(0,0,0,0.3)] border-2 border-blue-500 mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-blue-500 hover:bg-blue-600 hover:border-blue-600 duration-300"
                       onClick={(e) => changeColor(e)}
                       title="Profesionales IT, Directivos, Gestores"
                     ></button>
                     <button
                       id="orange"
-                      className="font-mono shadow-[0_4px_5px_0px_rgba(0,0,0,0.3)] border-2 border-orange-500 mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-orange-500 hover:bg-orange-600 duration-300"
+                      className="font-mono shadow-[0_4px_5px_0px_rgba(0,0,0,0.3)] border-2 border-orange-500 mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-orange-500 hover:bg-orange-600 hover:border-orange-600 duration-300"
                       onClick={(e) => changeColor(e)}
                       title="Marketing, Hostelería, Cocinero, Pastelero"
                     ></button>
                     <button
                       id="green"
-                      className="font-mono shadow-[0_4px_5px_0px_rgba(0,0,0,0.3)] border-2 border-green-500 mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-green-500 hover:bg-green-600 duration-300"
+                      className="font-mono shadow-[0_4px_5px_0px_rgba(0,0,0,0.3)] border-2 border-green-500 mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-green-500 hover:bg-green-600 hover:border-green-600 duration-300"
                       onClick={(e) => changeColor(e)}
                       title="Medio ambiente, Ecología"
+                    ></button>
+                    <button
+                      id="violet"
+                      className="font-mono shadow-[0_4px_5px_0px_rgba(0,0,0,0.3)] border-2 border-violet-500 mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-violet-500 hover:bg-violet-600 hover:border-violet-600 duration-300"
+                      onClick={(e) => changeColor(e)}
+                      title="Dentista, Decorador/Decoradora, Profesor Yoga/Profesora Yoga"
                     ></button>
                   </div>
                 </div>
               </div>
-              <div className="flex justify-center border-2 border-black mt-6 mb-3 p-1">
-                <div className="text-center border-2 border-violet-500 rounded-xl w-1/2">
-                  <button className="font-mono text-black font-bold md:text-lg sm:text-sm xs:text-xs">
-                    Descargar HV
-                  </button>
-                </div>
+              <div className="flex justify-center mb-8 p-1 md:mt-16 sm:mt-10 xs:mt-8">
+                <button
+                  className="font-mono font-bold text-black hover:text-white border-2 bg-transparent border-green-400 hover:bg-green-400 duration-300 rounded-xl p-1 md:w-1/3 md:h-4/5 md:text-lg sm:text-sm xs:text-xxs"
+                  title="¡Click para descargar CV!"
+                >
+                  {/*font-mono text-black font-bold md:text-lg sm:text-sm xs:text-xs*/}
+                  Descargar HV
+                </button>
+                {/*<div className="text-center border-2 border-purple-500">*/}
+                {/*text-center border-2 border-green-400 bg-transparent hover:bg-green-400 duration-300 rounded-xl p-1 md:w-1/3 md:h-4/5*/}
+                {/*</div>*/}
               </div>
             </div>
           </div>
