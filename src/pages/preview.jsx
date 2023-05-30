@@ -10,7 +10,6 @@ export default function Preview() {
     "border-red-300",
     "text-red-300",
   ]);
-  const [Text, setText] = useState("");
   const [hidden, setHidden] = useState({
     optionOne: "",
     optionTwo: "hidden",
@@ -226,7 +225,7 @@ export default function Preview() {
         </div>
         <br />
         {/*Full container*/}
-        <div className="grid grid-cols-6 gap-1 md:pl-2 sm:pl-2 xs:pl-1">
+        <div className="grid grid-cols-6 md:px-44 md:gap-10 sm:px-4 sm:gap-5 xs:pl-1 xs:gap-3">
           {/*Preview container*/}
           <div className="col-span-4 border-2 border-black">
             {/*FIRST OPTION*/}
@@ -304,7 +303,7 @@ export default function Preview() {
                       element.workPermits.length > 1
                         ? (element.workPermits[-1] = element
                             ? element.workPermits + "."
-                            : element.workPermits + ", ")
+                            : element.workPermits + ",")
                         : element.workPermits + "."
                     )}
                   </span>
@@ -895,7 +894,7 @@ export default function Preview() {
               </div>
               <div className="flex justify-center md:h-16 sm: xs:h-11">
                 <div className="flex justify-center md:w-3/5 sm:w-3/4 xs:w-full">
-                  <div className="flex justify-center border-2 rounded-full shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] bg-gray-200 border-black md:w-3/4 sm: xs:w-full">
+                  <div className="flex justify-center border-2 rounded-full shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] bg-gray-200 border-black md:w-fit md:p-3 sm:w-fit xs:w-fit">
                     <button
                       id="red"
                       className="font-mono shadow-[0_4px_5px_0px_rgba(0,0,0,0.3)] border-2 border-red-500 mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-red-500 hover:bg-red-600 hover:border-red-600 duration-300"
