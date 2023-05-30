@@ -9,11 +9,11 @@ export const fetchUserData = async (token) => {
         body: JSON.stringify({ token }),
     });
 
-    if (!response.ok) {
+    const data = await response.json();
+
+    if (data?.error) {
         throw new Error('Network response was not ok');
     }
-
-    const data = await response.json();
 
     return data
 }

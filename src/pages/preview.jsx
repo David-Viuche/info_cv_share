@@ -237,18 +237,19 @@ export default function Preview() {
         body: JSON.stringify({ token: currentToken }),
       });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
 
       const data = await response.json();
 
+      if (data?.error) {
+        throw new Error('Network response was not ok');
+      }
+      console.log(data)
       setData(data)
     }
 
     fetchCVData()
 
-  }, [router])
+  }, [])
 
   return (
     <Layout>
