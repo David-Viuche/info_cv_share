@@ -639,11 +639,15 @@ export default function Preview() {
                 {/*Name*/}
                 <div className="md:pt-4 sm:pt-2 xs:pt-1 md:text-center sm:text-center xs:text-center">
                   <span className="font-mono block text-black font-bold md:text-xl sm:text-base xs:text-xs">
-                    {data.name}
+                    {data.personalData.map((element) => (
+                      <div>{element.name}</div>
+                    ))}
                   </span>
                   {/*Position*/}
                   <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xxs">
-                    {data.preferredPosition}
+                    {data.futureJob.map((element) => (
+                      <div>{element.preferredPosition}</div>
+                    ))}
                   </span>
                 </div>
               </div>
