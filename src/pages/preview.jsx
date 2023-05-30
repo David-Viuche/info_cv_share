@@ -1,8 +1,10 @@
+/* eslint-disable react/jsx-key */
 import Layout from "@/components/Layout";
-import { useState, useEffect } from "react";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import { useState } from "react";
 
 export default function Preview() {
-  //const [actualColor, setActualColor] = useState("red-300"); //red-300
   const [actualColor, setActualColor] = useState([
     "bg-red-300",
     "border-red-300",
@@ -47,36 +49,87 @@ export default function Preview() {
 
     //SCOPE -> candidate_read_curriculum_personal_data
     //get/curriculum/{curriculumId}/personaldata
-    name: "Diego Andres Molina Romero",
-    country: "Colombia",
-    province: "Bogota D.C.",
-    country_province: "Colombia, Bogota D.C.", //Created
-    mobile_phone: "1234567890",
-    web_pages: "www.linkedin.com",
-    freelance: "Disponible",
-    nationalities: "Colombiano, Español",
-    workPermits: "Colombia, Alemania, España",
+
+    personalData: [
+      {
+        name: "Diego Andres Molina Romero",
+        country: "Colombia",
+        province: "Bogota D.C.",
+        mobile_phone: "1234567890",
+        web_pages: [{ url: "ELTIEMPO" }, { url: "TINDER" }, { url: "WHATS" }],
+        freelance: "Disponible",
+        nationalities: ["ALEMAN", "ESPAÑOL"],
+        workPermits: ["Colombia", "Alemania", "España"],
+      },
+    ],
 
     //candidate_read_curriculum_future_job
     //get/curriculum/{curriculumId}/futurejob
-    preferredPosition: "Desarrollador Software",
+
+    futureJob: [
+      {
+        preferredPosition: "Desarrollador Software",
+      },
+      {
+        preferredPosition: "Ingeniero",
+      },
+      { preferredPosition: "Arquitecto" },
+    ],
 
     //candidate_read_curriculum_experience
     //get/curriculum/{curriculumId}/experience/{experienceId}
-    company: "Uniminuto",
-    job: "Desarrollador",
-    startingDate_experience: "2006-09-14", //Original -> startingDate
-    finishingDate_experience: "2011-06-14", //Original -> finishDate
-    description:
-      "Programming as a web developer in several languages like Java, Javascript, HTML, SQL, ...",
+
+    experience: [
+      {
+        company: "Uniminuto",
+        job: "Desarrollador",
+        startingDate_experience: "2006-09-14",
+        finishingDate_experience: "2011-06-14",
+        description:
+          "Programming as a web developer in several languages like Java, Javascript, HTML, SQL, ...",
+      },
+      {
+        company: "UNIMONITO",
+        job: "Ingeniero",
+        startingDate_experience: "2012-09-14",
+        finishingDate_experience: "2021-06-14",
+        description: "ALGO",
+      },
+      {
+        company: "Arquitecto",
+        job: "ingeniero",
+        startingDate_experience: "2026-09-14",
+        finishingDate_experience: "2012-06-14",
+        description: "Arquitecto",
+      },
+    ],
 
     //candidate_read_curriculum_education
     //get/curriculum/{curriculumId}/education
-    educationLevelCode: "formacion-profesional-grado-superior",
-    courseName: "actividades-agrarias",
-    startingDate_education: "2005-10-01", //Original -> startingDate
-    finishingDate_education: "2006-11-01", //Original -> finishDate
-    institutionName: "Broward Community College",
+
+    education: [
+      {
+        educationLevelCode: "formacion-profesional-grado-INFERIOR",
+        courseName: "actividades-INGENIERILES",
+        startingDate_education: "2005-10-01",
+        finishingDate_education: "2006-11-01",
+        institutionName: "SENA",
+      },
+      {
+        educationLevelCode: "formacion-profesional-grado-SUPERIOR",
+        courseName: "actividades-AGRARIAS",
+        startingDate_education: "2005-10-01",
+        finishingDate_education: "2006-11-01",
+        institutionName: "UNIMONITO",
+      },
+      {
+        educationLevelCode: "formacion-profesional-TECNICA",
+        courseName: "actividades-DIFERENTES",
+        startingDate_education: "2005-10-01",
+        finishingDate_education: "2006-11-01",
+        institutionName: "DISTRITAL",
+      },
+    ],
   });
 
   function showCV(event) {
@@ -138,6 +191,29 @@ export default function Preview() {
     }
   }
 
+  function generatePDF(event) {
+    event.preventDefault();
+    var visibleCV = "";
+    if (hidden.optionOne == "") {
+      visibleCV = "optionOneCV";
+    } else if (hidden.optionTwo == "") {
+      visibleCV = "optionTwoCV";
+    } else {
+      visibleCV = "optionThreeCV";
+    }
+
+    const input = document.getElementById(visibleCV);
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      var width = pdf.internal.pageSize.getWidth();
+      var height = pdf.internal.pageSize.getHeight();
+      pdf.addImage(imgData, "JPEG", 0, 0, width, height);
+      pdf.output("dataurlnewwindow");
+      pdf.save("CV");
+    });
+  }
+
   return (
     <Layout>
       <main>
@@ -153,25 +229,28 @@ export default function Preview() {
         <div className="grid grid-cols-6 gap-1 md:pl-2 sm:pl-2 xs:pl-1">
           {/*Preview container*/}
           <div className="col-span-4 border-2 border-black">
-            {/*col-span-4 border-2 border-black*/}
             {/*FIRST OPTION*/}
             <div
-              className={`grid grid-cols-8 gap-1 h-full ${hidden.optionOne}`}
+              id="optionOneCV"
+              className={`grid grid-cols-8 gap-1 h-full ${hidden.optionOne} `}
             >
               {/*First col*/}
               <div
                 id="change"
                 className={`col-span-3 border-2  md:p-2 sm:p-2 xs:p-1 ${actualColor[0]} ${actualColor[1]}`}
               >
-                {/*${actualColor[0]} ${actualColor[1]}  bg-${actualColor} bg-red-300*/}
                 {/*Name*/}
                 <div className="md:pt-4 sm:pt-2 xs:pt-1 md:text-center sm:text-center xs:text-center">
                   <span className="font-mono block text-black font-bold md:text-xl sm:text-base xs:text-xs">
-                    {data.name}
+                    {data.personalData.map((element) => (
+                      <div>{element.name}</div>
+                    ))}
                   </span>
                   {/*Position*/}
                   <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xxs">
-                    {data.preferredPosition}
+                    {data.futureJob.map((element) => (
+                      <div>{element.preferredPosition}</div>
+                    ))}
                   </span>
                 </div>
                 {/*Line*/}
@@ -191,90 +270,80 @@ export default function Preview() {
                     Teléfono
                   </span>
                   <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                    {data.mobile_phone}
+                    {data.personalData.map((element) => (
+                      <div>{element.mobile_phone}</div>
+                    ))}
                   </span>
                   <span className="font-mono block text-black font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
                     Lugar de residencia
                   </span>
                   <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                    {data.country_province}
+                    {data.personalData.map((element) => (
+                      <div>
+                        {element.country}, {element.province}
+                      </div>
+                    ))}
                   </span>
                   <span className="font-mono block text-black font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
                     Nacionalidad
                   </span>
                   <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                    {data.nationalities}
+                    {data.personalData.map((element) =>
+                      element.nationalities.length > 1
+                        ? (element.nationalities[-1] = element
+                            ? element.nationalities + "."
+                            : element.nationalities + ",")
+                        : element.nationalities + "."
+                    )}
                   </span>
                   <span className="font-mono block text-black font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
                     Permiso de trabajo
                   </span>
                   <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                    {data.workPermits}
+                    {data.personalData.map((element) =>
+                      element.workPermits.length > 1
+                        ? (element.workPermits[-1] = element
+                            ? element.workPermits + "."
+                            : element.workPermits + ", ")
+                        : element.workPermits + "."
+                    )}
                   </span>
                 </div>
               </div>
               {/*Second col*/}
               <div className="col-span-5 pb-5">
-                {/*border-2 border-amber-500*/}
                 <div className="md:pl-5 md:pr-2 sm:pl-2 sm:pr-2 xs:pl-1 xs:pr-1">
                   {/*Experience*/}
                   <div
                     id="change"
                     className={` border-2 ${actualColor[0]} ${actualColor[1]} text-center mt-4 mb-4`}
                   >
-                    {/*shadow-[0_1px_0px_0px_rgba(0,0,0,0.3)]*/}
                     <span className="font-mono block shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       EXPERIENCIA
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">{data.company}</span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.job}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_experience}/
-                      {data.finishingDate_experience})
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.description}
-                    </span>
-                    {/***/}
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">{data.company}</span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.job}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_experience}/
-                      {data.finishingDate_experience})
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.description}
-                    </span>
-                    {/***/}
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">{data.company}</span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.job}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_experience}/
-                      {data.finishingDate_experience})
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.description}
-                    </span>
+                    {data.experience.map((element) => (
+                      <div>
+                        <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
+                          <li id="change" className={`${actualColor[2]}`}>
+                            <span className="text-black">
+                              {element.company}
+                            </span>
+                          </li>
+                        </span>
+                        <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
+                          {element.job}
+                        </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          ({element.startingDate_experience}/
+                          {element.finishingDate_experience})
+                        </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          {element.description}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                   {/*Education*/}
                   <div
@@ -286,65 +355,24 @@ export default function Preview() {
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.institutionName}
+                    {data.education.map((element) => (
+                      <div>
+                        <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
+                          <li id="change" className={`${actualColor[2]}`}>
+                            <span className="text-black">
+                              {element.institutionName}
+                            </span>
+                          </li>
                         </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.courseName}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_education}/
-                      {data.finishingDate_education})
-                    </span>
-                    {/***/}
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.institutionName}
+                        <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
+                          {element.courseName}
                         </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.courseName}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_education}/
-                      {data.finishingDate_education})
-                    </span>
-                    {/***/}
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.institutionName}
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          ({element.startingDate_education}/
+                          {element.finishingDate_education})
                         </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.courseName}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_education}/
-                      {data.finishingDate_education})
-                    </span>
-                    {/***/}
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.institutionName}
-                        </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.courseName}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_education}/
-                      {data.finishingDate_education})
-                    </span>
+                      </div>
+                    ))}
                   </div>
                   {/*Language*/}
                   <div
@@ -357,39 +385,27 @@ export default function Preview() {
                   </div>
                   <div className="pl-3 pr-3">
                     {/*ALL LANGUAGES*/}
-                    <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.languages[0].id}
+                    {data.languages.map((element) => (
+                      <div>
+                        <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
+                          <li id="change" className={`${actualColor[2]}`}>
+                            <span className="text-black">{element.id}</span>
+                          </li>
                         </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Habla:{data.languages[0].speaking}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Lectura:{data.languages[0].reading}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Escritura:{data.languages[0].writing}
-                    </span>
-                    {/******/}
-                    <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.languages[1].id}
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          Habla:
+                          {element.speaking}
                         </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Habla:{data.languages[1].speaking}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Lectura:{data.languages[1].reading}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Escritura:{data.languages[1].writing}
-                    </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          Lectura:
+                          {element.reading}
+                        </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          Escritura:
+                          {element.writing}
+                        </span>
+                      </div>
+                    ))}
                     {/*ALL LANGUAGES*/}
                   </div>
                 </div>
@@ -398,6 +414,7 @@ export default function Preview() {
             {/*FINISH FIRST OPTION*/}
             {/*SECOND OPTION*/}
             <div
+              id="optionTwoCV"
               className={`grid grid-cols-8 gap-1 h-full ${hidden.optionTwo}`}
             >
               {/*Top col*/}
@@ -408,17 +425,16 @@ export default function Preview() {
                 {/*Name*/}
                 <div className="md:pt-4 sm:pt-2 xs:pt-1 md:text-center sm:text-center xs:text-center">
                   <span className="font-mono block text-black font-bold md:text-xl sm:text-base xs:text-xs">
-                    {data.name}
+                    {data.personalData.map((element) => element.name)}
                   </span>
                   {/*Position*/}
                   <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xxs">
-                    {data.preferredPosition}
+                    {data.futureJob.map((element) => element.preferredPosition)}
                   </span>
                 </div>
               </div>
               {/*First col*/}
               <div className="col-span-4 pb-5">
-                {/*border-2 border-amber-500*/}
                 <div className="md:pl-5 md:pr-2 sm:pl-2 sm:pr-2 xs:pl-1 xs:pr-1">
                   {/*Education*/}
                   <div
@@ -430,72 +446,30 @@ export default function Preview() {
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.institutionName}
+                    {data.education.map((element) => (
+                      <div>
+                        <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
+                          <li id="change" className={`${actualColor[2]}`}>
+                            <span className="text-black">
+                              {element.institutionName}
+                            </span>
+                          </li>
                         </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.courseName}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_education}/
-                      {data.finishingDate_education})
-                    </span>
-                    {/***/}
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.institutionName}
+                        <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
+                          {element.courseName}
                         </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.courseName}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_education}/
-                      {data.finishingDate_education})
-                    </span>
-                    {/***/}
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.institutionName}
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          ({element.startingDate_education}/
+                          {element.finishingDate_education})
                         </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.courseName}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_education}/
-                      {data.finishingDate_education})
-                    </span>
-                    {/***/}
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.institutionName}
-                        </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.courseName}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_education}/
-                      {data.finishingDate_education})
-                    </span>
+                      </div>
+                    ))}
                   </div>
                   {/*Personal data*/}
                   <div
                     id="change"
                     className={` border-2 ${actualColor[0]} ${actualColor[1]} text-center mt-4 mb-4`}
                   >
-                    {/*shadow-[0_1px_0px_0px_rgba(0,0,0,0.3)]*/}
                     <span className="font-mono block shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       DATOS PERSONALES
                     </span>
@@ -507,7 +481,11 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.country_province}
+                      {data.personalData.map((element) => (
+                        <div>
+                          {element.country}, {element.province}
+                        </div>
+                      ))}
                     </span>
                     <span className="font-mono block text-black font-bold mt-4 md:text-lg sm:text-sm xs:text-xs">
                       <li id="change" className={`${actualColor[2]}`}>
@@ -515,7 +493,13 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.nationalities}
+                      {data.personalData.map((element) =>
+                        element.nationalities.length > 1
+                          ? (element.nationalities[-1] = element
+                              ? element.nationalities + "."
+                              : element.nationalities + ",")
+                          : element.nationalities + "."
+                      )}
                     </span>
                     <span className="font-mono block text-black font-bold mt-4 md:text-lg sm:text-sm xs:text-xs">
                       <li id="change" className={`${actualColor[2]}`}>
@@ -523,14 +507,19 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.workPermits}
+                      {data.personalData.map((element) =>
+                        element.workPermits.length > 1
+                          ? (element.workPermits[-1] = element
+                              ? element.workPermits + "."
+                              : element.workPermits + ", ")
+                          : element.workPermits + "."
+                      )}
                     </span>
                   </div>
                   <div
                     id="change"
                     className={` border-2 ${actualColor[0]} ${actualColor[1]} text-center mt-4 mb-4`}
                   >
-                    {/*shadow-[0_1px_0px_0px_rgba(0,0,0,0.3)]*/}
                     <span className="font-mono block shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       CONTACTO
                     </span>
@@ -542,7 +531,9 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.mobile_phone}
+                      {data.personalData.map((element) => (
+                        <div>{element.mobile_phone}</div>
+                      ))}
                     </span>
                     <span className="font-mono block text-black font-bold mt-4 md:text-lg sm:text-sm xs:text-xs">
                       <li id="change" className={`${actualColor[2]}`}>
@@ -550,73 +541,49 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.web_pages}
+                      {data.personalData.map((element) =>
+                        element.web_pages.length > 1
+                          ? element.web_pages.map((pages) => pages.url + " ")
+                          : element.web_pages[0].url
+                      )}
                     </span>
                   </div>
                 </div>
               </div>
               {/*Second col*/}
               <div className="col-span-4 pb-5">
-                {/*border-2 border-amber-500*/}
                 <div className="md:pl-5 md:pr-2 sm:pl-2 sm:pr-2 xs:pl-1 xs:pr-1">
                   {/*Experience*/}
                   <div
                     id="change"
                     className={` border-2 ${actualColor[0]} ${actualColor[1]} text-center mt-4 mb-4`}
                   >
-                    {/*shadow-[0_1px_0px_0px_rgba(0,0,0,0.3)]*/}
                     <span className="font-mono block shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       EXPERIENCIA
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">{data.company}</span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.job}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_experience}/
-                      {data.finishingDate_experience})
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.description}
-                    </span>
-                    {/***/}
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">{data.company}</span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.job}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_experience}/
-                      {data.finishingDate_experience})
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.description}
-                    </span>
-                    {/***/}
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">{data.company}</span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.job}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_experience}/
-                      {data.finishingDate_experience})
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.description}
-                    </span>
+                    {data.experience.map((element) => (
+                      <div>
+                        <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
+                          <li id="change" className={`${actualColor[2]}`}>
+                            <span className="text-black">
+                              {element.company}
+                            </span>
+                          </li>
+                        </span>
+                        <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
+                          {element.job}
+                        </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          ({element.startingDate_experience}/
+                          {element.finishingDate_experience})
+                        </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          {element.description}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                   {/*Language*/}
                   <div
@@ -629,51 +596,30 @@ export default function Preview() {
                   </div>
                   <div className="pl-3 pr-3">
                     {/*ALL LANGUAGES*/}
-                    <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.languages[0].id}
+                    {data.languages.map((element) => (
+                      <div>
+                        <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
+                          <li id="change" className={`${actualColor[2]}`}>
+                            <span className="text-black">{element.id}</span>
+                          </li>
                         </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Habla:
-                      <br />
-                      {data.languages[0].speaking}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Lectura:
-                      <br />
-                      {data.languages[0].reading}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Escritura:
-                      <br />
-                      {data.languages[0].writing}
-                    </span>
-                    {/******/}
-                    <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.languages[1].id}
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          Habla:
+                          <br />
+                          {element.speaking}
                         </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Habla:
-                      <br />
-                      {data.languages[1].speaking}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Lectura:
-                      <br />
-                      {data.languages[1].reading}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Escritura:
-                      <br />
-                      {data.languages[1].writing}
-                    </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          Lectura:
+                          <br />
+                          {element.reading}
+                        </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          Escritura:
+                          <br />
+                          {element.writing}
+                        </span>
+                      </div>
+                    ))}
                     {/*ALL LANGUAGES*/}
                   </div>
                 </div>
@@ -682,12 +628,13 @@ export default function Preview() {
             {/*FINISH SECOND OPTION*/}
             {/*THIRD OPTION*/}
             <div
+              id="optionThreeCV"
               className={`grid grid-cols-8 gap-1 h-full ${hidden.optionThree}`}
             >
               {/*Top col*/}
               <div
                 id="change"
-                className={`col-span-8 border-b-2 border-black rounded-ss-full rounded-br-full shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] ${actualColor[0]} md:p-2 sm:p-2 xs:p-1 `}
+                className={`col-span-8 border-b-2 border-black rounded-ss-full rounded-br-full ${actualColor[0]} md:p-2 sm:p-2 xs:p-1 `}
               >
                 {/*Name*/}
                 <div className="md:pt-4 sm:pt-2 xs:pt-1 md:text-center sm:text-center xs:text-center">
@@ -702,7 +649,6 @@ export default function Preview() {
               </div>
               {/*First col*/}
               <div className="col-span-4 pb-5">
-                {/*border-2 border-amber-500*/}
                 <div className="md:pl-5 md:pr-2 sm:pl-2 sm:pr-2 xs:pl-1 xs:pr-1 ">
                   {/*Education*/}
                   <div
@@ -714,72 +660,30 @@ export default function Preview() {
                     </span>
                   </div>
                   <div className="pl-3 pr-3 bg-gray-200 rounded-xl">
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.institutionName}
+                    {data.education.map((element) => (
+                      <div>
+                        <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
+                          <li id="change" className={`${actualColor[2]}`}>
+                            <span className="text-black">
+                              {element.institutionName}
+                            </span>
+                          </li>
                         </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.courseName}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_education}/
-                      {data.finishingDate_education})
-                    </span>
-                    {/***/}
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.institutionName}
+                        <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
+                          {element.courseName}
                         </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.courseName}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_education}/
-                      {data.finishingDate_education})
-                    </span>
-                    {/***/}
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.institutionName}
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          ({element.startingDate_education}/
+                          {element.finishingDate_education})
                         </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.courseName}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_education}/
-                      {data.finishingDate_education})
-                    </span>
-                    {/***/}
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.institutionName}
-                        </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.courseName}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_education}/
-                      {data.finishingDate_education})
-                    </span>
+                      </div>
+                    ))}
                   </div>
                   {/*Personal data*/}
                   <div
                     id="change"
                     className={` border-b-2 ${actualColor[1]} text-center rounded-full mt-4 mb-4`}
                   >
-                    {/*shadow-[0_1px_0px_0px_rgba(0,0,0,0.3)]*/}
                     <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       DATOS PERSONALES
                     </span>
@@ -791,7 +695,11 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.country_province}
+                      {data.personalData.map((element) => (
+                        <div>
+                          {element.country}, {element.province}
+                        </div>
+                      ))}
                     </span>
                     <span className="font-mono block text-black font-bold mt-4 md:text-lg sm:text-sm xs:text-xs">
                       <li id="change" className={`${actualColor[2]}`}>
@@ -799,7 +707,13 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.nationalities}
+                      {data.personalData.map((element) =>
+                        element.nationalities.length > 1
+                          ? (element.nationalities[-1] = element
+                              ? element.nationalities + "."
+                              : element.nationalities + ",")
+                          : element.nationalities + "."
+                      )}
                     </span>
                     <span className="font-mono block text-black font-bold mt-4 md:text-lg sm:text-sm xs:text-xs">
                       <li id="change" className={`${actualColor[2]}`}>
@@ -807,73 +721,51 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.workPermits}
+                      {data.personalData.map((element) =>
+                        element.workPermits.length > 1
+                          ? (element.workPermits[-1] = element
+                              ? element.workPermits + "."
+                              : element.workPermits + ", ")
+                          : element.workPermits + "."
+                      )}
                     </span>
                   </div>
                 </div>
               </div>
               {/*Second col*/}
               <div className="col-span-4 pb-5">
-                {/*border-2 border-amber-500*/}
                 <div className="md:pl-5 md:pr-2 sm:pl-2 sm:pr-2 xs:pl-1 xs:pr-1">
                   {/*Experience*/}
                   <div
                     id="change"
                     className={`border-b-2 ${actualColor[1]} rounded-full text-center mt-4 mb-4`}
                   >
-                    {/*border-2 ${actualColor[0]} ${actualColor[1]} text-center mt-4 mb-4 shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)]*/}
                     <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       EXPERIENCIA
                     </span>
                   </div>
                   <div className="pl-3 pr-3 bg-gray-200 rounded-xl">
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">{data.company}</span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.job}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_experience}/
-                      {data.finishingDate_experience})
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.description}
-                    </span>
-                    {/***/}
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">{data.company}</span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.job}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_experience}/
-                      {data.finishingDate_experience})
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.description}
-                    </span>
-                    {/***/}
-                    <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">{data.company}</span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
-                      {data.job}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      ({data.startingDate_experience}/
-                      {data.finishingDate_experience})
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.description}
-                    </span>
+                    {data.experience.map((element) => (
+                      <div>
+                        <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
+                          <li id="change" className={`${actualColor[2]}`}>
+                            <span className="text-black">
+                              {element.company}
+                            </span>
+                          </li>
+                        </span>
+                        <span className="font-mono block text-slate-900 italic md:text-lg sm:text-sm xs:text-xs">
+                          {element.job}
+                        </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          ({element.startingDate_experience}/
+                          {element.finishingDate_experience})
+                        </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          {element.description}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                   {/*Language*/}
                   <div
@@ -886,58 +778,34 @@ export default function Preview() {
                   </div>
                   <div className="pl-3 pr-3 bg-gray-200 rounded-xl">
                     {/*ALL LANGUAGES*/}
-                    <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.languages[0].id}
+                    {data.languages.map((element) => (
+                      <div>
+                        <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
+                          <li id="change" className={`${actualColor[2]}`}>
+                            <span className="text-black">{element.id}</span>
+                          </li>
                         </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Habla:
-                      <br />
-                      {data.languages[0].speaking}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Lectura:
-                      <br />
-                      {data.languages[0].reading}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Escritura:
-                      <br />
-                      {data.languages[0].writing}
-                    </span>
-                    {/******/}
-                    <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
-                      <li id="change" className={`${actualColor[2]}`}>
-                        <span className="text-black">
-                          {data.languages[1].id}
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          Habla:
+                          <br />
+                          {element.speaking}
                         </span>
-                      </li>
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Habla:
-                      <br />
-                      {data.languages[1].speaking}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Lectura:
-                      <br />
-                      {data.languages[1].reading}
-                    </span>
-                    <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      Escritura:
-                      <br />
-                      {data.languages[1].writing}
-                    </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          Lectura:
+                          <br />
+                          {element.reading}
+                        </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          Escritura:
+                          <br />
+                          {element.writing}
+                        </span>
+                      </div>
+                    ))}
                     {/*ALL LANGUAGES*/}
                   </div>
                 </div>
               </div>
-              {/*id="change"
-                className={`col-span-8 border-b-2 border-black rounded-ss-full rounded-br-full shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] ${actualColor[0]} md:p-2 sm:p-2 xs:p-1 `}*/}
-              {/*className="col-span-8 py-5 border-2  border-black md:pl-5 md:pr-2 sm:pl-2 sm:pr-2 xs:pl-1 xs:pr-1"*/}
               <div
                 id="change"
                 className={`col-span-8 border-t-2 border-black ${actualColor[0]} rounded-t-3xl md:pl-5 md:pr-2 sm:pl-2 sm:pr-2 xs:pl-1 xs:pr-1`}
@@ -946,7 +814,6 @@ export default function Preview() {
                   <div className="col-span-8 pb-2">
                     <div className="flex justify-center ">
                       <div id="change" className={`text-center`}>
-                        {/*shadow-[0_1px_0px_0px_rgba(0,0,0,0.3)]*/}
                         <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                           CONTACTO
                         </span>
@@ -958,7 +825,9 @@ export default function Preview() {
                       <span className="text-black">Teléfono</span>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.mobile_phone}
+                      {data.personalData.map((element) => (
+                        <div>{element.mobile_phone}</div>
+                      ))}
                     </span>
                   </div>
                   <div className="col-span-4 text-center mt-1">
@@ -966,7 +835,11 @@ export default function Preview() {
                       <span className="text-black">Redes sociales</span>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.web_pages}
+                      {data.personalData.map((element) =>
+                        element.web_pages.length > 1
+                          ? element.web_pages.map((pages) => pages.url + " ")
+                          : element.web_pages[0].url
+                      )}
                     </span>
                   </div>
                 </div>
@@ -976,7 +849,6 @@ export default function Preview() {
           </div>
           {/*Options col*/}
           <div className="col-span-2 shadow-[0_6px_5px_0px_rgba(0,0,0,0.3)] border-2 border-black h-fit md:p-2 sm:p-2 xs:p-1">
-            {/*col-span-2 shadow-[0_6px_5px_0px_rgba(0,0,0,0.3)] border-2 border-black md:h-1/3 md:p-2 sm:h-1/3 sm:p-2 xs:h-1/4 xs:p-1*/}
             <div className="md:pl-5 md:pr-2 sm:pl-2 sm:pr-2 xs:pl-1 xs:pr-1">
               <div className="border-2 border-slate-300 bg-slate-300 mt-3 md:mb-10 sm:mb-5 xs:mb-3">
                 <span className="font-mono block shadow-[0_3px_5px_0px_rgba(0,0,0,0.3)] text-black font-bold p-1 md:text-xl sm:text-base xs:text-xs ">
@@ -985,8 +857,6 @@ export default function Preview() {
               </div>
               <div className="flex justify-center md:h-16 sm: xs:h-11">
                 <div className="flex justify-center border-2 rounded-full shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] bg-gray-200 border-black md:w-3/4 sm: xs:w-full">
-                  {/*border-2 border-violet-500 flex justify-center */}
-                  {/*flex justify-center border-2 rounded-full shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] bg-gray-200 border-black md:w-3/4 sm: xs:w-full*/}
                   <button
                     id="optionOne"
                     className="font-mono text-black shadow-[0_4px_5px_0px_rgba(0,0,0,0.3)] mx-auto my-auto rounded-2xl border-2 border-blue-300 bg-blue-300 hover:bg-blue-400 hover:border-blue-400 duration-300 md:p-3 md:text-base md:w-1/6 md:h-4/5 sm:p-1 sm:text-sm sm:h-4/6 sm:w-1/4 xs:p-1 xs:text-xs xs:w-1/4 xs:rounded-lg"
@@ -1020,19 +890,14 @@ export default function Preview() {
                 </span>
               </div>
               <div className="flex justify-center md:h-16 sm: xs:h-11">
-                {/*border-2 border-red-800 flex justify-center md:h-16 sm: xs:h-11*/}
                 <div className="flex justify-center md:w-3/5 sm:w-3/4 xs:w-full">
-                  {/*border-4 border-violet-800 flex justify-center md:w-3/5 sm:w-3/4 xs:w-full*/}
                   <div className="flex justify-center border-2 rounded-full shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] bg-gray-200 border-black md:w-3/4 sm: xs:w-full">
                     <button
                       id="red"
                       className="font-mono shadow-[0_4px_5px_0px_rgba(0,0,0,0.3)] border-2 border-red-500 mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-red-500 hover:bg-red-600 hover:border-red-600 duration-300"
                       title="Finanzas, Banca, Seguros"
                       onClick={(e) => changeColor(e)}
-                    >
-                      {/*max-w-md p-4 mx-auto mt-4 bg-gray-200 sm:shadow-md sm::rounded-md sm:bg-gray-100 sm:p-6 md:bg-green-800*/}
-                      {/*font-mono border-2 border-black p-2 m-3 w-1/6 rounded-full bg-red-500 hover:bg-cyan-600 duration-300*/}
-                    </button>
+                    ></button>
                     <button
                       id="blue"
                       className="font-mono shadow-[0_4px_5px_0px_rgba(0,0,0,0.3)] border-2 border-blue-500 mx-auto my-auto md:p-4 sm:p-2 xs:p-2 rounded-full bg-blue-500 hover:bg-blue-600 hover:border-blue-600 duration-300"
@@ -1064,13 +929,10 @@ export default function Preview() {
                 <button
                   className="font-mono font-bold text-black hover:text-white border-2 bg-transparent border-green-400 hover:bg-green-400 duration-300 rounded-xl p-1 md:w-1/3 md:h-4/5 md:text-lg sm:text-sm xs:text-xxs"
                   title="¡Click para descargar CV!"
+                  onClick={(e) => generatePDF(e)}
                 >
-                  {/*font-mono text-black font-bold md:text-lg sm:text-sm xs:text-xs*/}
                   Descargar HV
                 </button>
-                {/*<div className="text-center border-2 border-purple-500">*/}
-                {/*text-center border-2 border-green-400 bg-transparent hover:bg-green-400 duration-300 rounded-xl p-1 md:w-1/3 md:h-4/5*/}
-                {/*</div>*/}
               </div>
             </div>
           </div>
