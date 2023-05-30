@@ -1,8 +1,10 @@
 /* eslint-disable react/jsx-key */
 import Layout from "@/components/Layout";
 import jsPDF from "jspdf";
+import { getToken } from "@/helpers/getToken";
+import { useRouter } from "next/router";
 import html2canvas from "html2canvas";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Preview() {
   const [actualColor, setActualColor] = useState([
@@ -16,6 +18,7 @@ export default function Preview() {
     optionTwo: "hidden",
     optionThree: "hidden",
   });
+  const router = useRouter();
   const [data, setData] = useState({
     //SCOPE -> candidate_read_curriculum_skills
     //get/curriculum/{curriculumId}/skill
@@ -214,6 +217,39 @@ export default function Preview() {
     });
   }
 
+  useEffect(() => {
+
+    const fetchCVData = async () => {
+
+      const currentToken = await getToken()
+
+      if (!currentToken) {
+        router.push('/')
+      }
+
+      let response
+
+      response = await fetch('/api/infocv', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: currentToken }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+
+      setData(data)
+    }
+
+    fetchCVData()
+
+  }, [router])
+
   return (
     <Layout>
       <main>
@@ -242,14 +278,14 @@ export default function Preview() {
                 {/*Name*/}
                 <div className="md:pt-4 sm:pt-2 xs:pt-1 md:text-center sm:text-center xs:text-center">
                   <span className="font-mono block text-black font-bold md:text-xl sm:text-base xs:text-xs">
-                    {data.personalData.map((element) => (
-                      <div>{element.name}</div>
+                    {data.personalData.map((element, index) => (
+                      <div key={index}>{element.name}</div>
                     ))}
                   </span>
                   {/*Position*/}
                   <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xxs">
-                    {data.futureJob.map((element) => (
-                      <div>{element.preferredPosition}</div>
+                    {data.futureJob.map((element, index) => (
+                      <div key={index}>{element.preferredPosition}</div>
                     ))}
                   </span>
                 </div>
@@ -270,16 +306,16 @@ export default function Preview() {
                     Teléfono
                   </span>
                   <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                    {data.personalData.map((element) => (
-                      <div>{element.mobile_phone}</div>
+                    {data.personalData.map((element, index) => (
+                      <div key={index}>{element.mobile_phone}</div>
                     ))}
                   </span>
                   <span className="font-mono block text-black font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
                     Lugar de residencia
                   </span>
                   <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                    {data.personalData.map((element) => (
-                      <div>
+                    {data.personalData.map((element, index) => (
+                      <div key={index}>
                         {element.country}, {element.province}
                       </div>
                     ))}
@@ -291,8 +327,8 @@ export default function Preview() {
                     {data.personalData.map((element) =>
                       element.nationalities.length > 1
                         ? (element.nationalities[-1] = element
-                            ? element.nationalities + "."
-                            : element.nationalities + ",")
+                          ? element.nationalities + "."
+                          : element.nationalities + ",")
                         : element.nationalities + "."
                     )}
                   </span>
@@ -303,8 +339,8 @@ export default function Preview() {
                     {data.personalData.map((element) =>
                       element.workPermits.length > 1
                         ? (element.workPermits[-1] = element
-                            ? element.workPermits + "."
-                            : element.workPermits + ", ")
+                          ? element.workPermits + "."
+                          : element.workPermits + ", ")
                         : element.workPermits + "."
                     )}
                   </span>
@@ -323,8 +359,8 @@ export default function Preview() {
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
-                    {data.experience.map((element) => (
-                      <div>
+                    {data.experience.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">
@@ -355,8 +391,8 @@ export default function Preview() {
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
-                    {data.education.map((element) => (
-                      <div>
+                    {data.education.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">
@@ -385,8 +421,8 @@ export default function Preview() {
                   </div>
                   <div className="pl-3 pr-3">
                     {/*ALL LANGUAGES*/}
-                    {data.languages.map((element) => (
-                      <div>
+                    {data.languages.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">{element.id}</span>
@@ -446,8 +482,8 @@ export default function Preview() {
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
-                    {data.education.map((element) => (
-                      <div>
+                    {data.education.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">
@@ -481,8 +517,8 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.personalData.map((element) => (
-                        <div>
+                      {data.personalData.map((element, index) => (
+                        <div key={index}>
                           {element.country}, {element.province}
                         </div>
                       ))}
@@ -496,8 +532,8 @@ export default function Preview() {
                       {data.personalData.map((element) =>
                         element.nationalities.length > 1
                           ? (element.nationalities[-1] = element
-                              ? element.nationalities + "."
-                              : element.nationalities + ",")
+                            ? element.nationalities + "."
+                            : element.nationalities + ",")
                           : element.nationalities + "."
                       )}
                     </span>
@@ -510,8 +546,8 @@ export default function Preview() {
                       {data.personalData.map((element) =>
                         element.workPermits.length > 1
                           ? (element.workPermits[-1] = element
-                              ? element.workPermits + "."
-                              : element.workPermits + ", ")
+                            ? element.workPermits + "."
+                            : element.workPermits + ", ")
                           : element.workPermits + "."
                       )}
                     </span>
@@ -531,8 +567,8 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.personalData.map((element) => (
-                        <div>{element.mobile_phone}</div>
+                      {data.personalData.map((element, index) => (
+                        <div key={index}>{element.mobile_phone}</div>
                       ))}
                     </span>
                     <span className="font-mono block text-black font-bold mt-4 md:text-lg sm:text-sm xs:text-xs">
@@ -563,8 +599,8 @@ export default function Preview() {
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
-                    {data.experience.map((element) => (
-                      <div>
+                    {data.experience.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">
@@ -596,8 +632,8 @@ export default function Preview() {
                   </div>
                   <div className="pl-3 pr-3">
                     {/*ALL LANGUAGES*/}
-                    {data.languages.map((element) => (
-                      <div>
+                    {data.languages.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">{element.id}</span>
@@ -639,14 +675,14 @@ export default function Preview() {
                 {/*Name*/}
                 <div className="md:pt-4 sm:pt-2 xs:pt-1 md:text-center sm:text-center xs:text-center">
                   <span className="font-mono block text-black font-bold md:text-xl sm:text-base xs:text-xs">
-                    {data.personalData.map((element) => (
-                      <div>{element.name}</div>
+                    {data.personalData.map((element, index) => (
+                      <div key={index}>{element.name}</div>
                     ))}
                   </span>
                   {/*Position*/}
                   <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xxs">
-                    {data.futureJob.map((element) => (
-                      <div>{element.preferredPosition}</div>
+                    {data.futureJob.map((element, index) => (
+                      <div key={index}>{element.preferredPosition}</div>
                     ))}
                   </span>
                 </div>
@@ -664,8 +700,8 @@ export default function Preview() {
                     </span>
                   </div>
                   <div className="pl-3 pr-3 bg-gray-200 rounded-xl">
-                    {data.education.map((element) => (
-                      <div>
+                    {data.education.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">
@@ -699,8 +735,8 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.personalData.map((element) => (
-                        <div>
+                      {data.personalData.map((element, index) => (
+                        <div key={index}>
                           {element.country}, {element.province}
                         </div>
                       ))}
@@ -714,8 +750,8 @@ export default function Preview() {
                       {data.personalData.map((element) =>
                         element.nationalities.length > 1
                           ? (element.nationalities[-1] = element
-                              ? element.nationalities + "."
-                              : element.nationalities + ",")
+                            ? element.nationalities + "."
+                            : element.nationalities + ",")
                           : element.nationalities + "."
                       )}
                     </span>
@@ -728,8 +764,8 @@ export default function Preview() {
                       {data.personalData.map((element) =>
                         element.workPermits.length > 1
                           ? (element.workPermits[-1] = element
-                              ? element.workPermits + "."
-                              : element.workPermits + ", ")
+                            ? element.workPermits + "."
+                            : element.workPermits + ", ")
                           : element.workPermits + "."
                       )}
                     </span>
@@ -749,8 +785,8 @@ export default function Preview() {
                     </span>
                   </div>
                   <div className="pl-3 pr-3 bg-gray-200 rounded-xl">
-                    {data.experience.map((element) => (
-                      <div>
+                    {data.experience.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">
@@ -782,8 +818,8 @@ export default function Preview() {
                   </div>
                   <div className="pl-3 pr-3 bg-gray-200 rounded-xl">
                     {/*ALL LANGUAGES*/}
-                    {data.languages.map((element) => (
-                      <div>
+                    {data.languages.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">{element.id}</span>
@@ -829,8 +865,8 @@ export default function Preview() {
                       <span className="text-black">Teléfono</span>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.personalData.map((element) => (
-                        <div>{element.mobile_phone}</div>
+                      {data.personalData.map((element, index) => (
+                        <div key={index}>{element.mobile_phone}</div>
                       ))}
                     </span>
                   </div>

@@ -55,7 +55,7 @@ export default async function handler(req, res) {
 
                 data = await responseExperience.json();
 
-                const experience = data?.experience?.[0]
+                const experience = data
 
                 const urlFetchEducation = `https://api.infojobs.net/api/1/curriculum/${cv_id}/education`
 
@@ -68,26 +68,42 @@ export default async function handler(req, res) {
 
                 let respuesta = {
                     languages: languajes,
-                    name: `${personalData?.name} ${personalData?.surname1}`,
-                    country: personalData?.country,
-                    province: personalData?.province,
-                    country_province: `${personalData?.country}, ${personalData?.province}`,
-                    mobile_phone: personalData?.internationalPhone,
-                    web_pages: personalData?.webpages?.[0]?.url || '',
-                    freelance: (personalData?.freelance) ? 'Disponible' : 'No disponible',
-                    nationalities: personalData?.nationalities?.[0] || '',
-                    workPermits: personalData?.workPermits?.[0] || '',
-                    preferredPosition: futureJob?.preferredPosition,
-                    company: experience?.company || '',
-                    job: experience?.job || '',
-                    startingDate_experience: experience?.startingDate || '',
-                    finishingDate_experience: experience?.finishingDate || '',
-                    description: experience?.description || '',
-                    educationLevelCode: education?.[0]?.educationLevelCode || '',
-                    courseName: education?.[0]?.courseCode || '',
-                    startingDate_education: education?.[0]?.startingDate || '',
-                    finishingDate_education: education?.[0]?.finishingDate || '',
-                    institutionName: education?.[0]?.institutionName || '',
+                    personalData: [{
+                        name: `${personalData?.name} ${personalData?.surname1}`,
+                        country: personalData?.country,
+                        province: personalData?.province,
+                        country_province: `${personalData?.country}, ${personalData?.province}`,
+                        mobile_phone: personalData?.internationalPhone,
+                        web_pages: personalData?.webpages,
+                        freelance: (personalData?.freelance) ? 'Disponible' : 'No disponible',
+                        nationalities: personalData?.nationalities?.[0] || '',
+                        workPermits: personalData?.workPermits?.[0] || '',
+                    }],
+                    futureJob: [{
+                        preferredPosition: futureJob?.preferredPosition,
+                    }
+                    ],
+
+                    experience: experience.experience.map(el => {
+                        return {
+                            company: el?.company || '',
+                            job: el?.job || '',
+                            startingDate_experience: new Date(el?.startingDate || '').toISOString().slice(0, 10),
+                            finishingDate_experience: new Date(el?.finishingDate || '').toISOString().slice(0, 10),
+                            description: el?.description || '',
+                        }
+                    }),
+                    education: education.map(el => {
+                        return {
+                            educationLevelCode: el?.educationLevelCode || '',
+                            courseName: el?.courseCode || '',
+                            startingDate_education: new Date(el?.startingDate || '').toISOString().slice(0, 10),
+                            finishingDate_education: new Date(el?.finishingDate || '').toISOString().slice(0, 10),
+                            institutionName: el?.institutionName || '',
+                        }
+                    }),
+
+
 
                 }
 
