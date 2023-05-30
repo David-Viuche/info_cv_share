@@ -15,6 +15,10 @@ Esta aplicación es parte de la participación en la hackatón de Infojobs. Su o
 - Diseño atractivo y responsive gracias a Tailwind CSS.
 - Tres templates seleccionables y colores disponibles 
 
+## Participantes
+- https://github.com/DiegoMolina04
+- https://github.com/David-Viuche
+
 ### Instalación
 Clona el repositorio en tu máquina local:
 ```bash
