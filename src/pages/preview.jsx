@@ -1,8 +1,10 @@
 /* eslint-disable react/jsx-key */
 import Layout from "@/components/Layout";
 import jsPDF from "jspdf";
+import { getToken } from "@/helpers/getToken";
+import { useRouter } from "next/router";
 import html2canvas from "html2canvas";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Preview() {
   const [actualColor, setActualColor] = useState([
@@ -15,6 +17,7 @@ export default function Preview() {
     optionTwo: "hidden",
     optionThree: "hidden",
   });
+  const router = useRouter();
   const [data, setData] = useState({
     //SCOPE -> candidate_read_curriculum_skills
     //get/curriculum/{curriculumId}/skill
@@ -204,7 +207,7 @@ export default function Preview() {
     const input = document.getElementById(visibleCV);
     html2canvas(input).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
+      const pdf = new jsPDF("p", "px", "a4");
       var width = pdf.internal.pageSize.getWidth();
       var height = pdf.internal.pageSize.getHeight();
       pdf.addImage(imgData, "JPEG", 0, 0, width, height);
@@ -212,6 +215,36 @@ export default function Preview() {
       pdf.save("CV");
     });
   }
+
+  useEffect(() => {
+    const fetchCVData = async () => {
+      const currentToken = await getToken();
+
+      if (!currentToken) {
+        router.push("/");
+      }
+
+      let response;
+
+      response = await fetch("/api/infocv", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: currentToken }),
+      });
+
+      const data = await response.json();
+
+      if (data?.error) {
+        throw new Error("Network response was not ok");
+      }
+      console.log(data);
+      setData(data);
+    };
+
+    fetchCVData();
+  }, []);
 
   return (
     <Layout>
@@ -241,14 +274,14 @@ export default function Preview() {
                 {/*Name*/}
                 <div className="md:pt-4 sm:pt-2 xs:pt-1 md:text-center sm:text-center xs:text-center">
                   <span className="font-mono block text-black font-bold md:text-xl sm:text-base xs:text-xs">
-                    {data.personalData.map((element) => (
-                      <div>{element.name}</div>
+                    {data.personalData.map((element, index) => (
+                      <div key={index}>{element.name}</div>
                     ))}
                   </span>
                   {/*Position*/}
                   <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xxs">
-                    {data.futureJob.map((element) => (
-                      <div>{element.preferredPosition}</div>
+                    {data.futureJob.map((element, index) => (
+                      <div key={index}>{element.preferredPosition}</div>
                     ))}
                   </span>
                 </div>
@@ -269,16 +302,16 @@ export default function Preview() {
                     Teléfono
                   </span>
                   <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                    {data.personalData.map((element) => (
-                      <div>{element.mobile_phone}</div>
+                    {data.personalData.map((element, index) => (
+                      <div key={index}>{element.mobile_phone}</div>
                     ))}
                   </span>
                   <span className="font-mono block text-black font-bold mt-4 md:text-xl sm:text-base xs:text-xs">
                     Lugar de residencia
                   </span>
                   <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                    {data.personalData.map((element) => (
-                      <div>
+                    {data.personalData.map((element, index) => (
+                      <div key={index}>
                         {element.country}, {element.province}
                       </div>
                     ))}
@@ -317,13 +350,13 @@ export default function Preview() {
                     id="change"
                     className={` border-2 ${actualColor[0]} ${actualColor[1]} text-center mt-4 mb-4`}
                   >
-                    <span className="font-mono block shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
+                    <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       EXPERIENCIA
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
-                    {data.experience.map((element) => (
-                      <div>
+                    {data.experience.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">
@@ -349,13 +382,13 @@ export default function Preview() {
                     id="change"
                     className={`border-2 ${actualColor[0]} ${actualColor[1]} text-center mt-4 mb-4`}
                   >
-                    <span className="font-mono block shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
+                    <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       EDUCACIÓN
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
-                    {data.education.map((element) => (
-                      <div>
+                    {data.education.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">
@@ -378,14 +411,14 @@ export default function Preview() {
                     id="change"
                     className={`border-2 ${actualColor[0]} ${actualColor[1]} text-center mt-4 mb-4`}
                   >
-                    <span className="font-mono block shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
+                    <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       IDIOMAS
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
                     {/*ALL LANGUAGES*/}
-                    {data.languages.map((element) => (
-                      <div>
+                    {data.languages.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">{element.id}</span>
@@ -419,7 +452,7 @@ export default function Preview() {
               {/*Top col*/}
               <div
                 id="change"
-                className={`col-span-8 border-b-2 border-black shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] ${actualColor[0]} md:p-2 sm:p-2 xs:p-1 `}
+                className={`col-span-8 border-b-2 border-black ${actualColor[0]} md:p-2 sm:p-2 xs:p-1 `}
               >
                 {/*Name*/}
                 <div className="md:pt-4 sm:pt-2 xs:pt-1 md:text-center sm:text-center xs:text-center">
@@ -440,13 +473,13 @@ export default function Preview() {
                     id="change"
                     className={`border-2 ${actualColor[0]} ${actualColor[1]} text-center mt-4 mb-4`}
                   >
-                    <span className="font-mono block shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
+                    <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       EDUCACIÓN
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
-                    {data.education.map((element) => (
-                      <div>
+                    {data.education.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">
@@ -469,7 +502,7 @@ export default function Preview() {
                     id="change"
                     className={` border-2 ${actualColor[0]} ${actualColor[1]} text-center mt-4 mb-4`}
                   >
-                    <span className="font-mono block shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
+                    <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       DATOS PERSONALES
                     </span>
                   </div>
@@ -480,8 +513,8 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.personalData.map((element) => (
-                        <div>
+                      {data.personalData.map((element, index) => (
+                        <div key={index}>
                           {element.country}, {element.province}
                         </div>
                       ))}
@@ -519,7 +552,7 @@ export default function Preview() {
                     id="change"
                     className={` border-2 ${actualColor[0]} ${actualColor[1]} text-center mt-4 mb-4`}
                   >
-                    <span className="font-mono block shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
+                    <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       CONTACTO
                     </span>
                   </div>
@@ -530,8 +563,8 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.personalData.map((element) => (
-                        <div>{element.mobile_phone}</div>
+                      {data.personalData.map((element, index) => (
+                        <div key={index}>{element.mobile_phone}</div>
                       ))}
                     </span>
                     <span className="font-mono block text-black font-bold mt-4 md:text-lg sm:text-sm xs:text-xs">
@@ -557,13 +590,13 @@ export default function Preview() {
                     id="change"
                     className={` border-2 ${actualColor[0]} ${actualColor[1]} text-center mt-4 mb-4`}
                   >
-                    <span className="font-mono block shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
+                    <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       EXPERIENCIA
                     </span>
                   </div>
                   <div className="pl-3 pr-3">
-                    {data.experience.map((element) => (
-                      <div>
+                    {data.experience.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">
@@ -589,14 +622,14 @@ export default function Preview() {
                     id="change"
                     className={`border-2 ${actualColor[0]} ${actualColor[1]} text-center mt-4 mb-4`}
                   >
-                    <span className="font-mono block shadow-[0_5px_5px_0px_rgba(0,0,0,0.3)] text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
+                    <span className="font-mono block text-black font-bold pt-1 pb-1 md:text-xl sm:text-base xs:text-xs">
                       IDIOMAS
                     </span>
                   </div>
-                  <div className="pl-3 pr-3">
-                    {/*ALL LANGUAGES*/}
-                    {data.languages.map((element) => (
-                      <div>
+                  <div className="pl-3 pr-3 md:hidden sm:hidden xs:block">
+                    {/*ALL LANGUAGES (screen <= 380px)*/}
+                    {data.languages.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">{element.id}</span>
@@ -619,7 +652,32 @@ export default function Preview() {
                         </span>
                       </div>
                     ))}
-                    {/*ALL LANGUAGES*/}
+                    {/*ALL LANGUAGES (screen <= 380px)*/}
+                  </div>
+                  <div className="pl-3 pr-3 md:block sm:block xs:hidden">
+                    {/*ALL LANGUAGES (screen > 380px)*/}
+                    {data.languages.map((element, index) => (
+                      <div key={index}>
+                        <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
+                          <li id="change" className={`${actualColor[2]}`}>
+                            <span className="text-black">{element.id}</span>
+                          </li>
+                        </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          Habla:
+                          {element.speaking}
+                        </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          Lectura:
+                          {element.reading}
+                        </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          Escritura:
+                          {element.writing}
+                        </span>
+                      </div>
+                    ))}
+                    {/*ALL LANGUAGES (screen > 380px)*/}
                   </div>
                 </div>
               </div>
@@ -638,14 +696,14 @@ export default function Preview() {
                 {/*Name*/}
                 <div className="md:pt-4 sm:pt-2 xs:pt-1 md:text-center sm:text-center xs:text-center">
                   <span className="font-mono block text-black font-bold md:text-xl sm:text-base xs:text-xs">
-                    {data.personalData.map((element) => (
-                      <div>{element.name}</div>
+                    {data.personalData.map((element, index) => (
+                      <div key={index}>{element.name}</div>
                     ))}
                   </span>
                   {/*Position*/}
                   <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xxs">
-                    {data.futureJob.map((element) => (
-                      <div>{element.preferredPosition}</div>
+                    {data.futureJob.map((element, index) => (
+                      <div key={index}>{element.preferredPosition}</div>
                     ))}
                   </span>
                 </div>
@@ -663,8 +721,8 @@ export default function Preview() {
                     </span>
                   </div>
                   <div className="pl-3 pr-3 bg-gray-200 rounded-xl">
-                    {data.education.map((element) => (
-                      <div>
+                    {data.education.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">
@@ -698,8 +756,8 @@ export default function Preview() {
                       </li>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.personalData.map((element) => (
-                        <div>
+                      {data.personalData.map((element, index) => (
+                        <div key={index}>
                           {element.country}, {element.province}
                         </div>
                       ))}
@@ -748,8 +806,8 @@ export default function Preview() {
                     </span>
                   </div>
                   <div className="pl-3 pr-3 bg-gray-200 rounded-xl">
-                    {data.experience.map((element) => (
-                      <div>
+                    {data.experience.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold uppercase md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">
@@ -779,10 +837,10 @@ export default function Preview() {
                       IDIOMAS
                     </span>
                   </div>
-                  <div className="pl-3 pr-3 bg-gray-200 rounded-xl">
-                    {/*ALL LANGUAGES*/}
-                    {data.languages.map((element) => (
-                      <div>
+                  <div className="pl-3 pr-3 bg-gray-200 rounded-xl md:hidden sm:hidden xs:block">
+                    {/*ALL LANGUAGES (screen <= 380px)*/}
+                    {data.languages.map((element, index) => (
+                      <div key={index}>
                         <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
                           <li id="change" className={`${actualColor[2]}`}>
                             <span className="text-black">{element.id}</span>
@@ -805,7 +863,32 @@ export default function Preview() {
                         </span>
                       </div>
                     ))}
-                    {/*ALL LANGUAGES*/}
+                    {/*ALL LANGUAGES (screen <= 380px)*/}
+                  </div>
+                  <div className="pl-3 pr-3 bg-gray-200 rounded-xl md:block sm:block xs:hidden">
+                    {/*ALL LANGUAGES (screen > 380px)*/}
+                    {data.languages.map((element, index) => (
+                      <div key={index}>
+                        <span className="font-mono block font-bold md:text-lg sm:text-sm xs:text-xs">
+                          <li id="change" className={`${actualColor[2]}`}>
+                            <span className="text-black">{element.id}</span>
+                          </li>
+                        </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          Habla:
+                          {element.speaking}
+                        </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          Lectura:
+                          {element.reading}
+                        </span>
+                        <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
+                          Escritura:
+                          {element.writing}
+                        </span>
+                      </div>
+                    ))}
+                    {/*ALL LANGUAGES (screen > 380px)*/}
                   </div>
                 </div>
               </div>
@@ -828,8 +911,8 @@ export default function Preview() {
                       <span className="text-black">Teléfono</span>
                     </span>
                     <span className="font-mono block text-slate-900 md:text-lg sm:text-sm xs:text-xs">
-                      {data.personalData.map((element) => (
-                        <div>{element.mobile_phone}</div>
+                      {data.personalData.map((element, index) => (
+                        <div key={index}>{element.mobile_phone}</div>
                       ))}
                     </span>
                   </div>
@@ -930,7 +1013,7 @@ export default function Preview() {
               </div>
               <div className="flex justify-center mb-8 p-1 md:mt-16 sm:mt-10 xs:mt-8">
                 <button
-                  className="font-mono font-bold text-black hover:text-white border-2 bg-transparent border-green-400 hover:bg-green-400 duration-300 rounded-xl p-1 md:w-1/3 md:h-4/5 md:text-lg sm:text-sm xs:text-xxs"
+                  className="font-mono font-bold text-black hover:text-white border-2 bg-transparent border-green-400 hover:bg-green-400 duration-300 rounded-xl p-1 w-fit md:h-4/5 md:text-lg sm:text-sm xs:text-xxs"
                   title="¡Click para descargar CV!"
                   onClick={(e) => generatePDF(e)}
                 >
